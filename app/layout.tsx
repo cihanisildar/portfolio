@@ -4,7 +4,7 @@ import { Poppins } from "next/font/google";
 import Navbar from "@/components/navbar";
 import { ViewTransitions } from "next-view-transitions";
 import Footer from "@/components/footer";
-import 'prismjs/themes/prism-okaidia.css' // Okaidia theme
+import 'prismjs/themes/prism-okaidia.css'
 
 const font = Poppins({
   subsets: ["latin"],

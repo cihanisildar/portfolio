@@ -105,7 +105,7 @@ const BlogPost = async ({ params }: BlogPostProps) => {
         </span>
 
         <div className="w-full mt-4 mb-32">
-          <aside className="fixed top-[25%] right-[5%]">
+        <aside className="cs:flex hidden fixed top-[25%] right-[5%]">
             <TableOfContents />
           </aside>
 

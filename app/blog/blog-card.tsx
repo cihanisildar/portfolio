@@ -21,10 +21,10 @@ const BlogCard: React.FC<BlogCardProps> = ({
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className={`grid grid-cols-4 h-fit gap-4 border-l-2 px-4 text-sm transition-all duration-500 ease-in-out ${
-      isHovered ? 'border-l-gray-800' : 'border-l-slate-300'
-    }`}>
-      <div className={`col-span-1 h-full px-2 py-4 text-xs transition-all duration-500 ease-in-out ${
+    <div className={`grid grid-cols-4 h-fit gap-4 px-4 text-sm transition-all duration-500 ease-in-out ${
+      isHovered ? 'md:border-l-gray-800' : 'md:border-l-slate-300'
+    } md:border-l-2`}>
+      <div className={`hidden md:block col-span-1 h-full px-2 py-4 text-xs transition-all duration-500 ease-in-out ${
         isHovered ? 'text-gray-800' : 'text-zinc-400'
       }`}>
         <h1>{date}</h1>
@@ -32,7 +32,7 @@ const BlogCard: React.FC<BlogCardProps> = ({
       </div>
       <Link
         href={`/blog/${slug}`}
-        className="col-span-3 border hover:shadow-md space-y-4 p-4 rounded-[8px] transition-all duration-500 ease-in-out cursor-pointer"
+        className="col-span-4 md:col-span-3 border hover:shadow-md space-y-4 p-4 rounded-[8px] transition-all duration-500 ease-in-out cursor-pointer"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         aria-label={`Read blog post: ${title}`}

@@ -14,14 +14,14 @@ const components: MDXComponents = {
     <h1 className="font-medium mb-0 fade-in" {...props} />
   ),
   h2: (props: HeadingProps) => (
-    <h2 className="text-gray-800 font-medium mt-8 mb-3" {...props} />
+    <h2 className="text-gray-800 font-medium mt-8 mb-3 w-full" {...props} />
   ),
   h3: (props: HeadingProps) => (
     <h3 className="text-gray-800 font-medium mt-8 mb-3" {...props} />
   ),
   h4: (props: HeadingProps) => <h4 className="font-medium" {...props} />,
   p: (props: ParagraphProps) => (
-    <p className="text-gray-800 leading-snug" {...props} />
+    <p className="text-gray-800 leading-snug w-full" {...props} />
   ),
   ol: (props: ListProps) => (
     <ol className="text-gray-800 list-decimal pl-5 space-y-2" {...props} />

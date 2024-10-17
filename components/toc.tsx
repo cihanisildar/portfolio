@@ -59,9 +59,9 @@ export default function TableOfContents() {
   }, []);
 
   return (
-    <nav className="toc text-sm" aria-label="Table of contents">
+    <nav className="toc text-xs w-[250px]" aria-label="Table of contents">
       <span className="block mb-2 ml-4 text-gray-600 font-semibold underline">On this post</span>
-      <ul className="space-y-2">
+      <ul className="space-y-2  border py-4 px-2 rounded-[8px]">
         {toc.map((item) => (
           <li key={item.id}>
             <Link

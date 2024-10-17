@@ -14,9 +14,6 @@ const Navbar = () => {
   );
   return (
     <div className="max-w-3xl mx-auto pt-20 h-[50px] px-4 flex items-center justify-between">
-      {/* <Link href="/" className="font-extralight">
-        cihan.
-      </Link> */}
       <Link href="/">
         {" "}
         <SwapText
@@ -29,7 +26,6 @@ const Navbar = () => {
 
       <div className="flex flex-row">
         <AnimatedBackground
-          //   defaultValue={TABS[0]}
           className="rounded-[8px] bg-zinc-100 dark:bg-zinc-800 "
           transition={{
             type: "spring",
@@ -43,7 +39,6 @@ const Navbar = () => {
               href={tab.path}
               key={index}
               data-id={tab}
-              // type="button"
               className="px-2 py-0.5 text-zinc-600 transition-colors duration-300 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50"
             >
               {tab.name}
