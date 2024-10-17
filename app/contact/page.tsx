@@ -11,7 +11,7 @@ export default function ContactPage() {
 
       <div className="mt-10 space-y-6">
         <p className="text-center text-gray-600">
-          I'd love to hear from you. Feel free to reach out using the email link below.
+          I&apos;d love to hear from you. Feel free to reach out using the email link below.
         </p>
 
         <div className="flex justify-center">
