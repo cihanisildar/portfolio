@@ -10,8 +10,8 @@ const projects = [
   {
     title: "Advanced Blog Platform",
     description: "A full-stack blog application developed with <strong>Next.js</strong> and <strong>TypeScript</strong>, featuring a robust admin panel. This project utilizes <strong>AWS S3</strong> for efficient media storage and <strong>Node.js</strong> for server-side operations. The admin panel allows for easy content management, while the main site offers a smooth, SEO-friendly reading experience.",
-    githubUrl: "", // GitHub link not ready yet
-    liveUrl: "", // Live Demo link not ready yet
+    githubUrl: "https://github.com/cihanisildar/blog",
+    liveUrl: "https://blogclient-ten.vercel.app/",
   },
   {
     title: "Quote Saver",
