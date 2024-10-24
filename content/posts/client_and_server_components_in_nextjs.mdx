@@ -1,0 +1,249 @@
+---
+title: "Understanding React Server Concepts: use client, use server, and server-only"
+description: Explore key React concepts in Next.js, focusing on 'use client', 'use server', and the 'server-only' package. Learn how to manage client-server boundaries, secure sensitive data, and integrate server-side functionality into client components efficiently.
+date: 2024-10-24
+tags: [react, nextjs]
+---
+
+# Understanding React Server Concepts: use client, use server, and server-only
+
+In modern React applications, especially with frameworks like Next.js 13+, understanding the distinction between client and server code is crucial. Today, we'll explore three important concepts that help manage this boundary: 'use client', 'use server', and the 'server-only' package.
+
+## The 'use client' Directive
+
+The 'use client' directive marks the boundary where client-side rendering begins. It's necessary when you need to use:
+
+- Browser APIs
+- React hooks (useState, useEffect, etc.)
+- Event handlers
+- Client-side libraries
+
+```jsx
+"use client";
+
+import { useState } from "react";
+
+export function ThemeToggle() {
+  const [isDark, setIsDark] = useState(false);
+
+  return (
+    <button onClick={() => setIsDark(!isDark)}>
+      Switch to {isDark ? "Light" : "Dark"} Mode
+    </button>
+  );
+}
+```
+
+## The 'use server' Directive
+
+The 'use server' directive marks server functions that can be called from client components. It's used for:
+
+- Form submissions
+- Data mutations
+- Server-side operations
+
+```jsx
+// app/actions.ts
+"use server";
+
+export async function updateUserProfile(formData: FormData) {
+  const name = formData.get("name");
+  const email = formData.get("email");
+
+  // Server-side operations
+  await db.user.update({
+    where: { email },
+    data: { name },
+  });
+}
+
+// app/profile-form.tsx
+("use client");
+
+import { updateUserProfile } from "./actions";
+
+export function ProfileForm() {
+  return (
+    <form action={updateUserProfile}>
+      <input name="name" type="text" />
+      <input name="email" type="email" />
+      <button type="submit">Update Profile</button>
+    </form>
+  );
+}
+```
+
+## The 'server-only' Package
+
+The 'server-only' package is a safety mechanism that ensures certain modules are never imported into client-side code. This is crucial for:
+
+- Protecting sensitive information (API keys, credentials)
+- Preventing accidental exposure of server-side logic
+- Catching mistakes during development
+
+First, install the package:
+
+```bash
+npm install server-only
+```
+
+Here's how to use it:
+
+```jsx
+// db.ts
+import "server-only";
+
+export const db = {
+  user: {
+    // Database connection details
+    connection: process.env.DATABASE_URL,
+
+    async find(id: string) {
+      // Database query logic
+    },
+  },
+};
+
+// If anyone tries to import this in a client component,
+// they'll get a build-time error
+```
+
+## Real-World Examples
+
+Let's look at a practical example combining all three concepts - a user dashboard with protected data:
+
+```jsx
+// lib/db.ts
+import "server-only";
+
+export async function getUserData(userId: string) {
+  // This file can only be imported on the server
+  const sensitiveData = await db.query(`
+    SELECT * FROM users WHERE id = ${userId}
+  `);
+  return sensitiveData;
+}
+
+// app/actions.ts
+("use server");
+
+import { getUserData } from "../lib/db";
+
+export async function updateUserSettings(userId: string, settings: any) {
+  // Server-side validation and database operations
+  const userData = await getUserData(userId);
+  // Update logic here
+}
+
+// app/dashboard/page.tsx
+import { getUserData } from "../lib/db";
+
+// Server Component
+export default async function DashboardPage() {
+  const userData = await getUserData("123");
+
+  return (
+    <div>
+      <UserProfile userData={userData} />
+      <SettingsForm />
+    </div>
+  );
+}
+
+// app/dashboard/settings-form.tsx
+("use client");
+
+import { updateUserSettings } from "../actions";
+
+export function SettingsForm() {
+  return <form action={updateUserSettings}>{/* Form fields */}</form>;
+}
+```
+
+## Best Practices
+
+1. **Use 'server-only' for Sensitive Modules**
+
+```jsx
+// config.ts
+import "server-only";
+
+export const config = {
+  apiKey: process.env.API_KEY,
+  databaseUrl: process.env.DATABASE_URL,
+  secretKey: process.env.SECRET_KEY,
+};
+```
+
+2. **Combine 'use server' with 'server-only'**
+
+```jsx
+// actions.ts
+"use server";
+import "server-only";
+import { config } from "./config";
+
+export async function processPayment(amount: number) {
+  // Safely access sensitive config
+  const stripe = new Stripe(config.secretKey);
+  // Process payment
+}
+```
+
+3. **Proper Separation of Concerns**
+
+```jsx
+// lib/auth.ts
+import "server-only";
+
+export async function validateUser(token: string) {
+  // Server-only authentication logic
+}
+
+// app/api/auth.ts
+("use server");
+import { validateUser } from "../lib/auth";
+
+export async function handleLogin(formData: FormData) {
+  const token = formData.get("token");
+  return validateUser(token);
+}
+
+// app/login.tsx
+("use client");
+import { handleLogin } from "../api/auth";
+
+export function LoginForm() {
+  return <form action={handleLogin}>{/* ... */}</form>;
+}
+```
+
+## Error Prevention
+
+The 'server-only' package helps catch common mistakes:
+
+```jsx
+// ❌ This will cause a build error
+"use client";
+
+import { db } from "./db"; // Error: Server-only module imported from client code
+
+// ✅ Correct approach
+("use client");
+
+import { updateUserData } from "./actions"; // Importing server actions is fine
+
+function UserForm() {
+  return <form action={updateUserData}>{/* ... */}</form>;
+}
+```
+
+## Conclusion
+
+Understanding these three concepts is crucial for building secure and efficient React applications:
+
+- 'use client': Marks the client/server boundary for interactive components
+- 'use server': Enables server functions to be called from client components
+- 'server-only': Prevents sensitive server code from being imported on the client
+
+When used together, they provide a robust system for managing the server/client boundary and protecting sensitive operations.
