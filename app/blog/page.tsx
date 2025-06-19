@@ -3,13 +3,27 @@ import path from "path";
 
 import { calculateReadingTime } from "@/utils/reading-time";
 import matter from "gray-matter";
-import BlogCard from "./blog-card";
+import BlogSearch from "./blog-search";
+
+interface Frontmatter {
+  title: string;
+  description: string;
+  date: string;
+  tags?: string[];
+  [key: string]: unknown;
+}
+
+interface Post {
+  slug: string;
+  frontmatter: Frontmatter;
+  readingTime: number;
+}
 
 export default function BlogPage() {
   const postsDirectory = path.join(process.cwd(), "content/posts");
   const fileNames = fs.readdirSync(postsDirectory);
 
-  const posts = fileNames.map((fileName) => {
+  const posts: Post[] = fileNames.map((fileName) => {
     const slug = fileName.replace(/\.mdx$/, "");
     const fullPath = path.join(postsDirectory, fileName);
     const fileContents = fs.readFileSync(fullPath, "utf8");
@@ -18,7 +32,7 @@ export default function BlogPage() {
 
     return {
       slug,
-      frontmatter,
+      frontmatter: frontmatter as Frontmatter,
       readingTime,
     };
   });
@@ -31,22 +45,7 @@ export default function BlogPage() {
         </h1>
       </span>
 
-      <div className="mt-10 space-y-8">
-        {posts.map((post) => {
-          const postDate = new Date(post.frontmatter.date).toLocaleDateString();
-
-          return (
-            <BlogCard
-              key={post.slug}
-              date={postDate}
-              readingTime={post.readingTime}
-              title={post.frontmatter.title}
-              description={post.frontmatter.description}
-              slug={post.slug}
-            />
-          );
-        })}
-      </div>
+      <BlogSearch posts={posts} />
     </div>
   );
 }

@@ -19,7 +19,7 @@ const Navbar = () => {
         <SwapText
           finalText="Cihan Işıldar"
           initialText="cihan."
-          supportsHover
+          supportsHover={false}
           disableClick
         />
       </Link>
@@ -39,7 +39,7 @@ const Navbar = () => {
               href={tab.path}
               key={index}
               data-id={tab}
-              className="px-2 py-0.5 text-zinc-600 transition-colors duration-300 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50"
+              className="px-2 py-1 text-zinc-600 transition-colors duration-300 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50"
             >
               {tab.name}
             </Link>

@@ -1,4 +1,4 @@
-import { Mail } from 'lucide-react'
+import { Mail, Download } from 'lucide-react'
 
 export default function ContactPage() {
   return (
@@ -27,6 +27,28 @@ export default function ContactPage() {
         <p className="text-center text-gray-500 mt-4">
           Or copy my email address: <span className="font-medium">cihan.isildar@outlook.com</span>
         </p>
+
+        {/* CV Download Section */}
+        <div className="mt-12 pt-8 border-t border-gray-200">
+          <p className="text-center text-gray-600 mb-4">
+            Want to learn more about my experience? Download my CV below.
+          </p>
+          
+          <div className="flex justify-center">
+            <a
+              href="/cihanisildar_cv.pdf.pdf"
+              download
+              className="inline-flex items-center px-6 py-3 text-lg font-semibold text-white bg-green-600 rounded-[4px] hover:bg-green-700 transition duration-300 shadow-lg"
+            >
+              <Download className="w-5 h-5 mr-2" />
+              Download CV
+            </a>
+          </div>
+          
+          <p className="text-center text-gray-500 mt-4">
+            Available formats: <span className="font-medium">PDF</span>
+          </p>
+        </div>
       </div>
     </div>
   )

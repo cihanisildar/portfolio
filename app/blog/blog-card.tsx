@@ -9,6 +9,7 @@ interface BlogCardProps {
   title: string;
   description: string;
   slug: string;
+  tags?: string[];
 }
 
 const BlogCard: React.FC<BlogCardProps> = ({
@@ -17,6 +18,7 @@ const BlogCard: React.FC<BlogCardProps> = ({
   title,
   description,
   slug,
+  tags = [],
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -29,6 +31,18 @@ const BlogCard: React.FC<BlogCardProps> = ({
       }`}>
         <h1>{date}</h1>
         <h2>{readingTime} min read</h2>
+        {tags.length > 0 && (
+          <div className="mt-2 flex flex-wrap gap-1">
+            {tags.map((tag) => (
+              <span
+                key={tag}
+                className="px-1.5 py-0.5 bg-zinc-100 text-zinc-600 rounded-[8px] text-[10px]"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
       <Link
         href={`/blog/${slug}`}
