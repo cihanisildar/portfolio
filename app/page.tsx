@@ -17,7 +17,7 @@ export default function Home() {
           efficient.
         </h1>
         <h1>
-          I’m always learning and enjoy{" "}
+          I'm always learning and enjoy{" "}
           <Link
             className="text-blue-500 hover:text-blue-700"
             href="/me/developer-experience"
@@ -33,6 +33,25 @@ export default function Home() {
             following clean coding practices
           </Link>{" "}
           and staying up-to-date with the latest industry trends.
+        </h1>
+        <h1>
+          When I'm not coding, you can find me exploring new technologies,{" "}
+          <Link
+            className="text-blue-500 hover:text-blue-700"
+            href="/blog"
+          >
+            writing about my learnings
+          </Link>
+          , or contributing to open-source projects. I believe in continuous
+          growth and love connecting with fellow developers to share knowledge
+          and collaborate on exciting{" "}
+          <Link
+            className="text-blue-500 hover:text-blue-700"
+            href="/projects"
+          >
+            projects
+          </Link>
+          .
         </h1>
       </div>
     </div>
