@@ -2,7 +2,7 @@ import { Github, ExternalLink, Calendar, Users } from "lucide-react";
 
 const projects = [
   {
-    title: "Personal Portfolio",
+    title: "Portfolio",
     description:
       "A sleek and responsive portfolio website built with <strong>Next.js</strong> and <strong>MDX</strong>. This project showcases my skills, projects, and blog posts in a modern, easily maintainable format. Features include dynamic routing, server-side rendering, and seamless integration of Markdown with JSX for efficient content management.",
     githubUrl: "https://github.com/cihanisildar/portfolio",
@@ -12,7 +12,7 @@ const projects = [
     status: "live"
   },
   {
-    title: "Advanced Blog Platform",
+    title: "Blog",
     description:
       "A full-stack blog application developed with <strong>Next.js</strong> and <strong>TypeScript</strong>, featuring a robust admin panel. This project utilizes <strong>AWS S3</strong> for efficient media storage and <strong>Node.js</strong> for server-side operations. The admin panel allows for easy content management, while the main site offers a smooth, SEO-friendly reading experience.",
     githubUrl: "https://github.com/cihanisildar/blog",
