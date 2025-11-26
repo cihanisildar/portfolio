@@ -23,7 +23,7 @@ export default function Home() {
         </p>
         <p>
           i like making things that just... work? not perfect, just functional. sometimes i write about
-          what i learn, sometimes i don't. depends on the mood honestly.
+          what i learn, sometimes i don&apos;t. depends on the mood honestly.
         </p>
         <p>
           got some random ideas floating around, working on projects when i feel like it.
@@ -34,7 +34,7 @@ export default function Home() {
           <a href="/blog" className="text-blue-500 hover:text-blue-700 underline">
             latest explorations
           </a>{" "}
-          for whatever i've been learning lately.
+          for whatever i&apos;ve been learning lately.
         </p>
       </div>
     </div>
