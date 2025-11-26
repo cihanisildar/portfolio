@@ -1,58 +1,41 @@
-import { Link } from "next-view-transitions";
+import Image from "next/image";
 
 export default function Home() {
   return (
     <div className="container mx-auto px-4 max-w-3xl py-8">
-      <div className="text-md mt-10 space-y-4 text-zinc-600">
-        <h1 className="transition-element">
-          Hi, I&apos;m Cihan, a Computer Engineering student passionate about{" "}
-          <Link
-            className="text-blue-500 hover:text-blue-700"
-            href="/me/techstack"
-          >
-            full-stack development
-          </Link>
-          . My expertise lies in TypeScript, React, Next.js, and Node.js, and I
-          focus on creating web applications that are both scalable and
-          efficient.
-        </h1>
-        <h1>
-          I&apos;m always learning and enjoy{" "}
-          <Link
-            className="text-blue-500 hover:text-blue-700"
-            href="/me/developer-experience"
-          >
-            enhancing developer experience
-          </Link>{" "}
-          through innovative solutions. My goal is to deliver high-quality code
-          by{" "}
-          <Link
-            className="text-blue-500 hover:text-blue-700"
-            href="/me/clean-code"
-          >
-            following clean coding practices
-          </Link>{" "}
-          and staying up-to-date with the latest industry trends.
-        </h1>
-        <h1>
-          When I&apos;m not coding, you can find me exploring new technologies,{" "}
-          <Link
-            className="text-blue-500 hover:text-blue-700"
-            href="/blog"
-          >
-            writing about my learnings
-          </Link>
-          , or contributing to open-source projects. I believe in continuous
-          growth and love connecting with fellow developers to share knowledge
-          and collaborate on exciting{" "}
-          <Link
-            className="text-blue-500 hover:text-blue-700"
-            href="/projects"
-          >
-            projects
-          </Link>
-          .
-        </h1>
+      <div className="flex items-center gap-6 mt-10">
+        <div className="relative w-24 h-24 flex-shrink-0">
+          <Image
+            src="/B_ Wayne (Absolute Batman).jpeg"
+            alt="Cihan"
+            fill
+            className="object-cover rounded-full"
+            priority
+          />
+        </div>
+        <h1 className="text-4xl font-bold text-zinc-800">building & breaking things</h1>
+      </div>
+
+      <div className="mt-8 text-zinc-600 space-y-3">
+        <p>
+          hey there. i build stuff on the web mostly. typescript, react, that whole thing.
+          currently studying computer engineering and trying to figure out how everything actually works under the hood.
+        </p>
+        <p>
+          i like making things that just... work? not perfect, just functional. sometimes i write about
+          what i learn, sometimes i don't. depends on the mood honestly.
+        </p>
+        <p>
+          got some random ideas floating around, working on projects when i feel like it.
+          might be onto something, might just be messing around. who knows.
+        </p>
+        <p>
+          check out my{" "}
+          <a href="/blog" className="text-blue-500 hover:text-blue-700 underline">
+            latest explorations
+          </a>{" "}
+          for whatever i've been learning lately.
+        </p>
       </div>
     </div>
   );
