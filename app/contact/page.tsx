@@ -7,7 +7,6 @@ import {
 } from 'react';
 import { Link } from 'next-view-transitions';
 import styles from '../index.module.css';
-import { MatrixBackground } from '@/components/MatrixBackground';
 import { TextBackground } from '@/components/TextBackground';
 
 export default function ContactPage() {
@@ -36,10 +35,8 @@ export default function ContactPage() {
         } as CSSProperties
       }
     >
-      <MatrixBackground />
-
-      <div className="mb-[2lh] relative z-10 animate-textFade">
-        <Link href="/" className="bg-white hover:bg-black hover:text-white underline decoration-dotted underline-offset-4 pointer-events-auto">
+      <div className="mb-[2lh] animate-textFade">
+        <Link href="/" className="bg-white hover:bg-black hover:text-white underline decoration-dotted underline-offset-4">
           ← home
         </Link>
       </div>

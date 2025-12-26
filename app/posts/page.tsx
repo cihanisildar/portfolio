@@ -7,7 +7,6 @@ import {
 } from 'react';
 import { Link } from 'next-view-transitions';
 import styles from '../index.module.css';
-import { MatrixBackground } from '@/components/MatrixBackground';
 import { TextBackground } from '@/components/TextBackground';
 
 export default function PostsPage() {
@@ -36,7 +35,6 @@ export default function PostsPage() {
                 } as CSSProperties
             }
         >
-            <MatrixBackground />
             <nav className="bg-white animate-textFade mb-[2lh]">
                 <Link href="/blog" className="hover:bg-black hover:text-white underline">← back to blog</Link>
             </nav>

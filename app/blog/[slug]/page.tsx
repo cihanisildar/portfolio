@@ -94,10 +94,10 @@ const BlogPost = async ({ params }: BlogPostProps) => {
     a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
       const { href, ...rest } = props;
       return (
-        <Link 
-          href={href || '#'} 
-          {...rest} 
-          className={cn("bg-white underline decoration-dotted underline-offset-4 hover:bg-black hover:text-white transition-colors", props.className)} 
+        <Link
+          href={href || '#'}
+          {...rest}
+          className={cn("bg-white underline decoration-dotted underline-offset-4 hover:bg-black hover:text-white transition-colors", props.className)}
         />
       );
     },

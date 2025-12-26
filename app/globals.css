@@ -29,34 +29,38 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-#new a:hover {
-  background: black;
-  color: white;
+/* 🔑 KRİTİK: Bu kurallar olmadan yazılar görünmez! */
+#new p:not(#background):not(#background *),
+#new h2:not(#background):not(#background *),
+#new ul:not(#background):not(#background *),
+#new h1:not(#background):not(#background *),
+#new li:not(#background):not(#background *),
+#new .animate-textFade:not(#background):not(#background *) {
+  position: relative;
+  max-width: 70ch;
+  color: #171717;
+  width: fit-content;
+  opacity: 0;
+  animation: fadeIn 0.7s ease-in both;
+  animation-delay: 0.4s;
+  pointer-events: none;
 }
 
-#new a:focus-visible {
-  outline: 2px solid #006aff;
+#new a,
+#new button {
+  position: relative;
+  pointer-events: auto !important;
+}
+
+#new a:hover {
+  background: black !important;
+  color: white !important;
+  text-decoration: none;
 }
 
 #new ::selection {
   background: black;
   color: white;
-}
-
-/* 🔑 KRİTİK: Animasyon temelleri */
-.animate-textFade {
-  opacity: 0;
-}
-
-#new .animate-textFade:not(#background):not(#background *) {
-  position: relative;
-  color: #171717;
-  width: fit-content;
-}
-
-/* Paragraflar için sınırlama opsiyonel olabilir, ama kod blokları için olmamalı */
-#new p.animate-textFade {
-  max-width: 70ch;
 }
 
 @keyframes fadeIn {

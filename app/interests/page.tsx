@@ -3,34 +3,19 @@
 import { type CSSProperties, useEffect, useRef } from 'react';
 import { Link } from 'next-view-transitions';
 import styles from '../index.module.css';
-import { MatrixBackground } from '@/components/MatrixBackground';
 
 export default function InterestsPage() {
   const mainRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const container = mainRef.current;
     if (!container) return;
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-          const el = entry.target as HTMLElement;
-          el.style.animationDelay = `${index * 50}ms`;
-          el.style.animationPlayState = 'running';
-          observer.unobserve(el);
-        }
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
     const nodes = container.querySelectorAll('.animate-textFade');
-    nodes.forEach((el) => {
-      (el as HTMLElement).style.animationPlayState = 'paused';
-      observer.observe(el);
+    nodes.forEach((el, index) => {
+      (el as HTMLElement).style.animationDelay = `calc(${index + 1} * var(--animation-delay-step))`;
     });
-
-    return () => observer.disconnect();
   }, []);
 
   const interests = [
@@ -83,36 +68,32 @@ export default function InterestsPage() {
         } as CSSProperties
       }
     >
-      <MatrixBackground />
+      <div className="mb-[2lh] animate-textFade">
+        <Link href="/" className="bg-white hover:bg-black hover:text-white underline decoration-dotted underline-offset-4">
+          ← home
+        </Link>
+      </div>
 
-      <div className="relative z-10">
-        <div className="mb-[2lh] animate-textFade">
-          <Link href="/" className="bg-white hover:bg-black hover:text-white underline decoration-dotted underline-offset-4 pointer-events-auto">
-            ← home
-          </Link>
-        </div>
+      <h1 className="bg-white animate-textFade inline-block text-zinc-800">interested things</h1>
+      <p className="bg-white text-zinc-600 animate-textFade mt-[0.5lh] max-w-[60ch]">
+        a wall of things i&apos;ve learned, am currently exploring, or find deeply fascinating in the world of software and systems.
+      </p>
 
-        <h1 className="bg-white animate-textFade inline-block">interested things</h1>
-        <p className="bg-white text-zinc-600 animate-textFade mt-[0.5lh] max-w-[60ch]">
-          a wall of things i&apos;ve learned, am currently exploring, or find deeply fascinating in the world of software and systems.
-        </p>
-
-        <div className="mt-[2lh] space-y-[2lh]">
-          {interests.map((group, groupIndex) => (
-            <div key={groupIndex} className="animate-textFade">
-              <h2 className="font-bold bg-white inline-block mb-[0.5lh]">{group.category}</h2>
-              <ul className="list-none space-y-[0.5lh]">
-                {group.items.map((item, itemIndex) => (
-                  <li key={itemIndex} className="border-l-2 border-zinc-200 pl-4">
-                    <p className="bg-white/80 py-1">
-                      {item}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+      <div className="mt-[2lh] space-y-[2lh]">
+        {interests.map((group, groupIndex) => (
+          <div key={groupIndex} className="animate-textFade">
+            <h2 className="font-bold bg-white inline-block mb-[0.5lh] text-zinc-800">{group.category}</h2>
+            <ul className="list-none space-y-[0.5lh]">
+              {group.items.map((item, itemIndex) => (
+                <li key={itemIndex} className="border-l-2 border-zinc-200 pl-4 bg-white/80">
+                  <span className="py-1">
+                    {item}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
     </main>
   );
