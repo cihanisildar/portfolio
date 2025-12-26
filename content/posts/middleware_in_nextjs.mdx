@@ -1,42 +1,36 @@
 ---
-title: Middleware in Next.js
-description: Explore the power of middleware in Next.js to enhance request handling and control. This post delves into how middleware functions work, showcases practical use cases, and demonstrates how to integrate them for optimized performance and security in your Next.js applications.
+title: middleware tricks
+description: middleware in next.js lets you run code before requests hit your pages.auth, redirects, headers - all the good stuff.
 date: 2024-10-06
 tags: [react, nextjs]
 ---
 
-# Middleware in Next.js
+# middleware tricks
 
-Middleware in Next.js provides a powerful mechanism to execute custom code before a request is completed. It allows you to intercept requests before they reach the page component, enabling operations like authentication, authorization, server-side redirects, logging, and modifying the request or response objects.
+middleware runs before your request completes. intercepts stuff before it hits the page. perfect for auth, redirects, logging, modifying requests/responses.
 
-Middleware may not be the best solution for complex data fetching and manipulation, heavy computational tasks, extensive session management, or direct database operations. These situations should be addressed within Route Handlers or server-side utilities, as middleware should be lightweight, responsive, and capable of managing these tasks.
+not great for heavy lifting though - keep it light. no complex data fetching, heavy compute, or direct db ops. use route handlers for that.
 
-## Convention
+## setup
 
-Next.js allows for middleware implementation by creating a `middleware.js` (or `.ts`) file in the project root directory.
-
-> The middleware.ts file supports one project, but modular organization allows for cleaner management of route-specific middleware, centralized control, and optimization of performance by avoiding multiple middleware layers.
+create `middleware.ts` in your project root:
 
 ```typescript
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-// Middleware function that redirects to the home page
 export function middleware(request: NextRequest) {
   return NextResponse.redirect(new URL('/home', request.url))
 }
 
-// The `matcher` defines which routes the middleware should apply to.
 export const config = {
   matcher: '/about/:path*',
 }
 ```
 
-## Matching Paths
+## matching paths
 
-Middleware will be invoked for **every route in your project**. If you want to apply it to specific routes, you need to mention a route **matcher** inside.
-
-You can match a single path or multiple paths with an array syntax:
+middleware runs on every route by default. use matcher to target specific ones:
 
 ```typescript
 export const config = {
@@ -44,222 +38,144 @@ export const config = {
 }
 ```
 
-The matcher config supports full regex, allowing complex pattern matching such as negative lookaheads or specific character matching. For instance, you can use a negative lookahead to exclude certain paths from being matched:
+regex works too. exclude certain paths:
 
 ```typescript
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico, sitemap.xml, robots.txt (metadata files)
-     */
     '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
   ],
 }
 ```
 
-## NextResponse
+## NextResponse basics
 
-NextResponse is an API in Next.js that allows you to work with responses in Middleware. It provides methods for redirecting requests, rewriting responses, setting headers, cookies, etc.
+redirect, rewrite, set headers and cookies:
 
 ```typescript
 import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
 
-export function myMiddleware(request: NextRequest) {
-  // Redirect the request to a different URL
+export function middleware(request: NextRequest) {
+  // redirect
   return NextResponse.redirect('/new-url')
 
-  // Rewrite the response to display content from a different URL
+  // or rewrite
   // return NextResponse.rewrite('/new-content')
 
-  // Set response headers and cookies
+  // or modify response
   // const response = NextResponse.next()
-  // response.headers.set('X-Custom-Header', 'Hello, Middleware!')
-  // response.cookies.set('myCookie', '123')
+  // response.headers.set('X-Custom-Header', 'sup')
   // return response
 }
 ```
 
-## Using Cookies
+## cookies
 
-Cookies are handled as standard headers: they are stored in the `Cookie` header for requests and in the `Set-Cookie` header for responses. Next.js simplifies cookie management through the `cookies` extension available on both `NextRequest` and `NextResponse`.
+simple cookie handling:
 
 ```typescript
-import { NextResponse } from 'next/server'
-
 export function middleware(request) {
-  // Retrieving a specific cookie from the incoming request
-  // Suppose the request has a header: Cookie:nextjs=fast
+  // get cookie
   let cookie = request.cookies.get('nextjs')
-  console.log(cookie)
-  // Output: { name: 'nextjs', value: 'fast', Path: '/' }
 
-  // Retrieving all cookies from the incoming request
-  const allCookies = request.cookies.getAll()
-  console.log(allCookies)
-  // Output: [{ name: 'nextjs', value: 'fast' }]
-
-  // Checking if a specific cookie exists
+  // check if exists
   const hasCookie = request.cookies.has('nextjs')
-  console.log(hasCookie) // Output: true
 
-  // Deleting a cookie
+  // delete it
   request.cookies.delete('nextjs')
-  console.log(request.cookies.has('nextjs')) // Output: false
 
-  // Creating a response object
+  // set new cookie
   const response = NextResponse.next()
-
-  // Setting a cookie on the response
   response.cookies.set('vercel', 'fast')
 
-  // Alternatively, setting a cookie with more options
-  response.cookies.set({
-    name: 'vercel',
-    value: 'fast',
-    path: '/', // Cookie will be accessible under '/'
-  })
-
-  // Retrieving a cookie from the outgoing response
-  cookie = response.cookies.get('vercel')
-  console.log(cookie)
-  // Output: { name: 'vercel', value: 'fast', Path: '/' }
-
-  // The response will include a 'Set-Cookie: vercel=fast; Path=/' header.
   return response
 }
 ```
 
-## Setting Headers
+## headers
 
-Starting with **Next.js v13.0.0**, you can set both **request** and **response** headers using the `NextResponse` API. This allows you to modify or add custom headers in your middleware.
+add custom headers to requests or responses:
 
 ```typescript
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
-
 export function middleware(request: NextRequest) {
-  // Clone the request headers
   const requestHeaders = new Headers(request.headers)
+  requestHeaders.set('x-custom', 'hello')
 
-  // Add a new header `x-hello-from-middleware1` to the cloned headers
-  requestHeaders.set('x-hello-from-middleware1', 'hello')
-  
-  // Pass the modified headers into the NextResponse for the next request
   const response = NextResponse.next({
-    request: {
-      // Use the new headers for the forwarded request
-      headers: requestHeaders,
-    },
+    request: { headers: requestHeaders },
   })
 
-  // Add a custom header `x-hello-from-middleware2` to the outgoing response
-  response.headers.set('x-hello-from-middleware2', 'hello')
-
-  // Return the response with the new headers
+  response.headers.set('x-response', 'sup')
   return response
 }
 ```
 
-## CORS
+## CORS handling
 
-CORS (Cross-Origin Resource Sharing) allows your server to handle requests from different origins (domains) safely. In this example, we will configure middleware to manage both **simple** and **preflighted** cross-origin requests.
+manage cross-origin requests:
 
 ```typescript
-import { NextRequest, NextResponse } from 'next/server'
-
-// Define a list of allowed origins for CORS
 const allowedOrigins = ['https://acme.com', 'https://my-app.org']
 
-// Specify CORS options
 const corsOptions = {
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', // Allowed methods
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization', // Allowed headers
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 }
 
 export function middleware(request: NextRequest) {
-  // Extract the origin of the incoming request
-  const origin = request.headers.get('origin') ?? '' // Use empty string if no origin
-
-  // Check if the origin is in the allowed origins list
+  const origin = request.headers.get('origin') ?? ''
   const isAllowedOrigin = allowedOrigins.includes(origin)
 
-  // Handle preflight (OPTIONS) requests
+  // handle preflight
   if (request.method === 'OPTIONS') {
-    // Preflight requests check if the origin and methods are allowed
     const preflightHeaders = {
-      ...(isAllowedOrigin && { 'Access-Control-Allow-Origin': origin }), // If allowed, set the origin
-      ...corsOptions, // Include CORS options (methods, headers)
+      ...(isAllowedOrigin && { 'Access-Control-Allow-Origin': origin }),
+      ...corsOptions,
     }
-    // Respond with 200 OK and the CORS headers
     return NextResponse.json({}, { headers: preflightHeaders })
   }
 
-  // Handle simple requests (e.g., GET, POST)
-  const response = NextResponse.next() // Continue to the next middleware or handler
-
-  // If the origin is allowed, set the `Access-Control-Allow-Origin` header
+  // handle simple requests
+  const response = NextResponse.next()
   if (isAllowedOrigin) {
     response.headers.set('Access-Control-Allow-Origin', origin)
   }
 
-  // Set additional CORS headers
-  Object.entries(corsOptions).forEach(([key, value]) => {
-    response.headers.set(key, value)
-  })
-
-  // Return the response with the necessary CORS headers
   return response
 }
 
-// Define a matcher to apply this middleware to API routes only
 export const config = {
   matcher: '/api/:path*',
 }
 ```
 
-## Producing Response
+## early responses
 
-In **Next.js version 13.1.0** and beyond, middleware can return a response directly by using either the `Response` or `NextResponse` instance. This allows you to handle requests and respond early, without passing the request further into the application.
+respond directly without hitting your app:
 
 ```typescript
-import { NextResponse } from 'next/server'
 import { isAuthenticated } from '@lib/auth'
 
-// Limit this middleware to paths starting with `/api/`
 export const config = {
-  matcher: '/api/:function*', // Apply middleware to API routes
+  matcher: '/api/:function*',
 }
 
 export function middleware(request) {
-  // Call a function to check if the user is authenticated
   if (!isAuthenticated(request)) {
-    // If the request is not authenticated, respond with an error
     return new Response(
-      JSON.stringify({
-        success: false, // Indicates failure
-        message: 'Authentication failed', // Error message
-      }),
-      {
-        status: 401, // Unauthorized status
-        headers: { 'Content-Type': 'application/json' }, // JSON response
-      }
+      JSON.stringify({ success: false, message: 'nope' }),
+      { status: 401, headers: { 'Content-Type': 'application/json' } }
     )
   }
 
-  // If authenticated, allow the request to proceed
-  return NextResponse.next() // Pass the request to the next handler
+  return NextResponse.next()
 }
 ```
 
-## Benefits of Middleware
+## why use it
 
-- It can handle user authentication and authorization processes.
-- It is used to manage user sessions and handle session creation, tracking, and expiration.
-- It is used to validate user input to prevent common security vulnerabilities such as cross-site scripting (XSS), and SQL injection.
-- It can add, modify, or remove HTTP headers in incoming or outgoing requests and responses.
-- It can be used to redirect users at the server level based on user role.
+- auth & authorization
+- session management
+- input validation & security
+- header manipulation
+- server-side redirects based on user role

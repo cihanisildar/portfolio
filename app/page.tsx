@@ -1,42 +1,135 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import {
+  type CSSProperties,
+  useEffect,
+  useRef,
+} from 'react';
+import type { NextPage } from 'next';
+import { Link } from 'next-view-transitions';
+import styles from './index.module.css';
+import { MatrixBackground } from '@/components/MatrixBackground';
+import { TextBackground } from '@/components/TextBackground';
+import { Lightbulb } from 'lucide-react';
+
+const Home: NextPage = () => {
+  const mainRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const container = mainRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          el.style.animationDelay = `${index * 50}ms`;
+          el.style.animationPlayState = 'running';
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    const nodes = container.querySelectorAll('.animate-textFade');
+    nodes.forEach((el) => {
+      (el as HTMLElement).style.animationPlayState = 'paused';
+      observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const aboutText = "full-stack engineer with international production experience. building scalable web applications with node.js and next.js. focused on distributed systems and performance optimization.";
+
   return (
-    <div className="container mx-auto px-4 max-w-3xl py-8">
-      <div className="flex items-center gap-6 mt-10">
-        <div className="relative w-24 h-24 flex-shrink-0">
-          <Image
-            src="/B_ Wayne (Absolute Batman).jpeg"
-            alt="Cihan"
-            fill
-            className="object-cover rounded-full"
-            priority
-          />
-        </div>
-        <h1 className="text-4xl font-bold text-zinc-800">building & breaking things</h1>
-      </div>
+    <main
+      className={`${styles.container} relative leading-normal pl-[2ch] pt-[1lh] pr-[2ch] sm:pt-[2lh] sm:pl-[7ch] min-h-[100dvh] pb-[1lh]`}
+      id="new"
+      ref={mainRef}
+      style={
+        {
+          '--animation-delay-step': '50ms',
+        } as CSSProperties
+      }
+    >
+      <MatrixBackground />
 
-      <div className="mt-8 text-zinc-600 space-y-3">
-        <p>
-          hey there. i build stuff on the web mostly. typescript, react, that whole thing.
-          currently studying computer engineering and trying to figure out how everything actually works under the hood.
+      <div className="relative z-10">
+        <h1 className="bg-white animate-textFade">m. cihan ışıldar</h1>
+        <p className="block bg-white animate-textFade text-zinc-600">antalya, turkey</p>
+
+        <Link
+          href="/interests"
+          className="!absolute top-[0lh] right-0 hover:bg-black h-[1lh] transition-colors !w-[3ch] flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#006aff] rounded-none hover:!text-white bg-white animate-textFade"
+          aria-label="Interests"
+        >
+          <Lightbulb size={16} className="fill-current" />
+        </Link>
+
+        <h2 className="font-bold mt-[2lh] sm:mt-[3lh] bg-white animate-textFade">today</h2>
+        <p className="mt-[0lh] relative animate-textFade">
+          <TextBackground text={aboutText} />
+          {aboutText}
         </p>
-        <p>
-          i like making things that just... work? not perfect, just functional. sometimes i write about
-          what i learn, sometimes i don&apos;t. depends on the mood honestly.
-        </p>
-        <p>
-          got some random ideas floating around, working on projects when i feel like it.
-          might be onto something, might just be messing around. who knows.
-        </p>
-        <p>
-          check out my{" "}
-          <a href="/blog" className="text-blue-500 hover:text-blue-700 underline">
-            latest explorations
-          </a>{" "}
-          for whatever i&apos;ve been learning lately.
-        </p>
+
+        <h2 className="font-bold mt-[2lh] bg-white animate-textFade">past</h2>
+        <ul className="list-none">
+          <li className="bg-white animate-textFade">
+            <Link href="https://github.com/cihanisildar">cloudit (uk)</Link>, frontend developer intern
+          </li>
+          <li className="bg-white animate-textFade">
+            <Link href="https://github.com/cihanisildar">emanager (nl)</Link>, backend developer intern
+          </li>
+          <li className="bg-white animate-textFade">
+            <Link href="https://github.com/cihanisildar">turkcell (tr)</Link>, backend developer intern
+          </li>
+        </ul>
+
+        <h2 className="font-bold mt-[2lh] animate-textFade bg-white">stack</h2>
+        <ul className="list-none">
+          <li className="bg-white animate-textFade text-zinc-600">
+            typescript, javascript, python
+          </li>
+          <li className="bg-white animate-textFade text-zinc-600">
+            react, next.js, tailwind, tanstack query
+          </li>
+          <li className="bg-white animate-textFade text-zinc-600">
+            node.js, express, postgresql, redis, docker, aws
+          </li>
+        </ul>
+
+        <h2 className="font-bold mt-[2lh] animate-textFade bg-white">links</h2>
+        <ul className="list-none">
+          <li className="animate-textFade">
+            <Link href="https://github.com/cihanisildar" className="bg-white">
+              github
+            </Link>
+          </li>
+          <li className="animate-textFade">
+            <Link href="https://linkedin.com/in/cihanisildar" className="bg-white">
+              linkedin
+            </Link>
+          </li>
+          <li className="animate-textFade">
+            <Link href="https://x.com/cihanolmalibu" className="bg-white">
+              twitter
+            </Link>
+          </li>
+          <li className="animate-textFade">
+            <Link href="/blog" className="bg-white">
+              blog
+            </Link>
+          </li>
+          <li className="animate-textFade">
+            <Link href="/contact" className="bg-white">
+              contact
+            </Link>
+          </li>
+        </ul>
       </div>
-    </div>
+    </main>
   );
-}
+};
+
+export default Home;

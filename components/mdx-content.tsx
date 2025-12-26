@@ -47,21 +47,21 @@ const components: MDXComponents = {
     }
     if (href?.startsWith('#')) {
       return (
-        <a href={href} className={className} {...props}>
+        <Link href={href ?? '#'} className={className} {...props}>
           {children}
-        </a>
+        </Link>
       );
     }
     return (
-      <a
-        href={href}
+      <Link
+        href={href ?? ''}
         target="_blank"
         rel="noopener noreferrer"
         className={className}
         {...props}
       >
         {children}
-      </a>
+      </Link>
     );
   },
   code: ({ children, className, ...props }: ComponentPropsWithoutRef<'code'>) => {

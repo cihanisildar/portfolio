@@ -2,35 +2,81 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-  overflow-y: scroll;
-  overflow-x: hidden;
-  scroll-behavior: smooth;
-}
-
+html,
 body {
-  /* width: 100vw; */
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+    Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  height: fit-content;
   min-height: 100vh;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  font-size: 1rem;
+  background-color: #ffffff;
 }
 
-.anchor {
-  margin-left: 0.5em;
+* {
+  box-sizing: border-box;
+}
+
+/* 🔑 Ana Sayfa Stilleri (#new id'si önemli!) */
+#new a {
+  text-decoration: underline;
+  color: #171717;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#new button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+#new a:hover {
+  background: black;
+  color: white;
+}
+
+#new a:focus-visible {
+  outline: 2px solid #006aff;
+}
+
+#new ::selection {
+  background: black;
+  color: white;
+}
+
+/* 🔑 KRİTİK: Animasyon temelleri */
+.animate-textFade {
   opacity: 0;
-  transition: opacity 0.2s ease-in-out;
 }
 
-h1:hover .anchor,
-h2:hover .anchor,
-h3:hover .anchor,
-h4:hover .anchor,
-h5:hover .anchor,
-h6:hover .anchor {
-  opacity: 1;
+#new .animate-textFade:not(#background):not(#background *) {
+  position: relative;
+  color: #171717;
+  width: fit-content;
 }
 
-.anchor-icon {
-  font-size: 0.8em;
-  vertical-align: middle;
+/* Paragraflar için sınırlama opsiyonel olabilir, ama kod blokları için olmamalı */
+#new p.animate-textFade {
+  max-width: 70ch;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes textFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

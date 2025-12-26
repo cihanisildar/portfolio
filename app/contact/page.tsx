@@ -1,55 +1,66 @@
-import { Mail, Download } from 'lucide-react'
+"use client";
+
+import {
+  type CSSProperties,
+  useEffect,
+  useRef,
+} from 'react';
+import { Link } from 'next-view-transitions';
+import styles from '../index.module.css';
+import { MatrixBackground } from '@/components/MatrixBackground';
+import { TextBackground } from '@/components/TextBackground';
 
 export default function ContactPage() {
+  const mainRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const container = mainRef.current;
+    if (!container) return;
+    const nodes = container.querySelectorAll('.animate-textFade');
+    nodes.forEach((el, index) => {
+      (el as HTMLElement).style.animationDelay = `calc(${index + 1} * var(--animation-delay-step))`;
+    });
+  }, []);
+
+  const contactDesc = "let's build something scalable together.";
+
   return (
-    <div className="max-w-3xl mx-auto py-8 mt-10">
-      <span className="flex items-center justify-center">
-        <h1 className="text-xl font-semibold text-gray-600 text-center underline">
-          get in touch
-        </h1>
-      </span>
+    <main
+      className={`${styles.container} relative leading-normal pl-[2ch] pt-[1lh] pr-[2ch] sm:pt-[2lh] sm:pl-[7ch] min-h-screen`}
+      id="new"
+      ref={mainRef}
+      style={
+        {
+          '--animation-delay-step': '50ms',
+        } as CSSProperties
+      }
+    >
+      <MatrixBackground />
 
-      <div className="mt-10 space-y-6">
-        <p className="text-center text-gray-600">
-          I&apos;d love to hear from you. Feel free to reach out using the email link below.
-        </p>
-
-        <div className="flex justify-center">
-          <a
-            href="mailto:cihan.isildar@outlook.com"
-            className="inline-flex items-center px-6 py-3 text-lg font-semibold text-white bg-blue-600 rounded-[4px] hover:bg-blue-700 transition duration-300 shadow-lg "
-          >
-            <Mail className="w-5 h-5 mr-2" />
-            Send me an email
-          </a>
-        </div>
-
-        <p className="text-center text-gray-500 mt-4">
-          Or copy my email address: <span className="font-medium">cihan.isildar@outlook.com</span>
-        </p>
-
-        {/* CV Download Section */}
-        <div className="mt-12 pt-8 border-t border-gray-200">
-          <p className="text-center text-gray-600 mb-4">
-            Want to learn more about my experience? Download my CV below.
-          </p>
-          
-          <div className="flex justify-center">
-            <a
-              href="/cihanisildar_cv.pdf.pdf"
-              download
-              className="inline-flex items-center px-6 py-3 text-lg font-semibold text-white bg-green-600 rounded-[4px] hover:bg-green-700 transition duration-300 shadow-lg"
-            >
-              <Download className="w-5 h-5 mr-2" />
-              Download CV
-            </a>
-          </div>
-          
-          <p className="text-center text-gray-500 mt-4">
-            Available formats: <span className="font-medium">PDF</span>
-          </p>
-        </div>
+      <div className="mb-[2lh] relative z-10 animate-textFade">
+        <Link href="/" className="bg-white hover:bg-black hover:text-white underline decoration-dotted underline-offset-4 pointer-events-auto">
+          ← home
+        </Link>
       </div>
-    </div>
-  )
+
+      <h1 className="bg-white animate-textFade">contact</h1>
+      <p className="mt-[1lh] relative animate-textFade">
+        <TextBackground text={contactDesc} />
+        {contactDesc}
+      </p>
+
+      <ul className="list-none mt-[2lh]">
+        <li className="animate-textFade">
+          <Link href="mailto:cihan.isildar@outlook.com" className="bg-white underline font-bold hover:bg-black hover:text-white">email</Link>
+        </li>
+        <li className="animate-textFade">
+          <Link href="https://linkedin.com/in/cihanisildar" className="bg-white underline font-bold hover:bg-black hover:text-white">linkedin</Link>
+        </li>
+        <li className="animate-textFade">
+          <Link href="https://x.com/cihanolmalibu" className="bg-white underline font-bold hover:bg-black hover:text-white">twitter</Link>
+        </li>
+      </ul>
+    </main>
+  );
 }

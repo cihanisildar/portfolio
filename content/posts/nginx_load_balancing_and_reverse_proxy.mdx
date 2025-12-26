@@ -1,0 +1,244 @@
+---
+title: nginx for load balancing and reverse proxy
+description: nginx basics for distributing traffic and hiding your backend. simple but powerful.
+date: 2025-11-27
+tags: [nginx, devops, performance]
+---
+
+# nginx for load balancing and reverse proxy
+
+nginx does two things really well: spreading traffic across servers and sitting in front of your app. basic setup is dead simple.
+
+## reverse proxy basics
+
+point nginx at your backend:
+
+```nginx
+server {
+  listen 80;
+  server_name example.com;
+
+  location / {
+    proxy_pass http://localhost:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+}
+```
+
+hides your app server, handles SSL, serves static files fast. your node/python/whatever app doesn't face internet directly.
+
+## why reverse proxy
+
+- SSL termination in one place
+- serve static files without hitting app
+- rate limiting and security
+- hide internal architecture
+- easier to swap backends
+
+## basic load balancing
+
+round-robin across multiple servers:
+
+```nginx
+upstream backend {
+  server 192.168.1.10:3000;
+  server 192.168.1.11:3000;
+  server 192.168.1.12:3000;
+}
+
+server {
+  listen 80;
+
+  location / {
+    proxy_pass http://backend;
+  }
+}
+```
+
+nginx cycles through servers. one dies, traffic goes to others.
+
+## load balancing methods
+
+**least connections** - send to server with fewest active connections:
+
+```nginx
+upstream backend {
+  least_conn;
+  server 192.168.1.10:3000;
+  server 192.168.1.11:3000;
+}
+```
+
+**ip hash** - same client always hits same server:
+
+```nginx
+upstream backend {
+  ip_hash;
+  server 192.168.1.10:3000;
+  server 192.168.1.11:3000;
+}
+```
+
+good for sticky sessions.
+
+**weighted** - send more traffic to beefier servers:
+
+```nginx
+upstream backend {
+  server 192.168.1.10:3000 weight=3;
+  server 192.168.1.11:3000 weight=1;
+}
+```
+
+## health checks
+
+mark servers down when they fail:
+
+```nginx
+upstream backend {
+  server 192.168.1.10:3000 max_fails=3 fail_timeout=30s;
+  server 192.168.1.11:3000 max_fails=3 fail_timeout=30s;
+  server 192.168.1.12:3000 backup;
+}
+```
+
+after 3 failed requests, server sits out for 30s. backup only gets traffic if others are down.
+
+## static files optimization
+
+serve static stuff directly, proxy rest to app:
+
+```nginx
+server {
+  listen 80;
+  root /var/www/public;
+
+  location /static/ {
+    expires 1y;
+    add_header Cache-Control "public, immutable";
+  }
+
+  location / {
+    try_files $uri @backend;
+  }
+
+  location @backend {
+    proxy_pass http://localhost:3000;
+  }
+}
+```
+
+## SSL termination
+
+handle https at nginx, talk to backends over http:
+
+```nginx
+server {
+  listen 443 ssl http2;
+  server_name example.com;
+
+  ssl_certificate /etc/ssl/cert.pem;
+  ssl_certificate_key /etc/ssl/key.pem;
+
+  location / {
+    proxy_pass http://backend;
+    proxy_set_header X-Forwarded-Proto https;
+  }
+}
+
+upstream backend {
+  server 192.168.1.10:3000;
+  server 192.168.1.11:3000;
+}
+```
+
+## websocket support
+
+websockets need special headers:
+
+```nginx
+location /ws {
+  proxy_pass http://backend;
+  proxy_http_version 1.1;
+  proxy_set_header Upgrade $http_upgrade;
+  proxy_set_header Connection "upgrade";
+}
+```
+
+## rate limiting
+
+protect backend from abuse:
+
+```nginx
+limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
+
+server {
+  location /api/ {
+    limit_req zone=api burst=20 nodelay;
+    proxy_pass http://backend;
+  }
+}
+```
+
+10 requests per second per IP, allow bursts up to 20.
+
+## useful config
+
+full setup with common patterns:
+
+```nginx
+upstream backend {
+  least_conn;
+  server 192.168.1.10:3000 max_fails=3 fail_timeout=30s;
+  server 192.168.1.11:3000 max_fails=3 fail_timeout=30s;
+  keepalive 32;
+}
+
+server {
+  listen 80;
+  server_name example.com;
+  return 301 https://$server_name$request_uri;
+}
+
+server {
+  listen 443 ssl http2;
+  server_name example.com;
+
+  ssl_certificate /etc/ssl/cert.pem;
+  ssl_certificate_key /etc/ssl/key.pem;
+
+  location /static/ {
+    root /var/www;
+    expires 1y;
+    access_log off;
+  }
+
+  location / {
+    proxy_pass http://backend;
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+
+    proxy_connect_timeout 60s;
+    proxy_send_timeout 60s;
+    proxy_read_timeout 60s;
+  }
+}
+```
+
+## why nginx
+
+- stupid fast for static files
+- handles tons of connections
+- simple config
+- battle tested
+- low memory usage
+
+throw it in front of your app. scale horizontally. sleep better.

@@ -1,15 +1,11 @@
+import LayoutContent from "@/components/layout-content";
 import type { Metadata } from "next";
-import "./globals.css";
-import { Poppins } from "next/font/google";
-import Navbar from "@/components/navbar";
 import { ViewTransitions } from "next-view-transitions";
-import Footer from "@/components/footer";
+import { GeistMono } from "geist/font/mono";
 import "prismjs/themes/prism-okaidia.css";
+import "./globals.css";
 
-const font = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
+const font = GeistMono;
 
 export const metadata: Metadata = {
   title: "cihanisildar.tr",
@@ -30,14 +26,10 @@ export default function RootLayout({
     <ViewTransitions>
       <html lang="en">
         <body
-          className={`${font.className} antialiased relative`}
+          className="antialiased relative"
           suppressHydrationWarning
         >
-          <main className="pb-10">
-            <Navbar />
-            {children}
-            <Footer />
-          </main>
+          <LayoutContent fontClass={font.className}>{children}</LayoutContent>
         </body>
       </html>
     </ViewTransitions>

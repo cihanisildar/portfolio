@@ -1,0 +1,127 @@
+---
+title: cache stampede problem
+description: when your cache expires and everything hits the db at once. classic footgun.
+date: 2025-11-20
+tags: [performance, caching]
+---
+
+# cache stampede problem
+
+cache expires. suddenly 1000 requests hit your db simultaneously. congrats, you just took yourself down.
+
+happens when popular cache key expires and multiple requests race to regenerate it. they all miss cache, all query db, all try writing back. wasteful and dangerous.
+
+## the basic problem
+
+```typescript
+async function getData(key: string) {
+  const cached = await cache.get(key)
+  if (cached) return cached
+
+  // cache miss - everyone hits this at once
+  const data = await db.query('expensive query')
+  await cache.set(key, data, 3600)
+  return data
+}
+```
+
+when cache expires, every concurrent request runs the expensive query. ouch.
+
+## simple fix: locks
+
+use a lock so only one request regenerates:
+
+```typescript
+const locks = new Map()
+
+async function getData(key: string) {
+  const cached = await cache.get(key)
+  if (cached) return cached
+
+  // check if someone's already fetching
+  if (locks.has(key)) {
+    await locks.get(key)
+    return cache.get(key)
+  }
+
+  // acquire lock
+  const promise = fetchAndCache(key)
+  locks.set(key, promise)
+
+  try {
+    return await promise
+  } finally {
+    locks.delete(key)
+  }
+}
+
+async function fetchAndCache(key: string) {
+  const data = await db.query('expensive query')
+  await cache.set(key, data, 3600)
+  return data
+}
+```
+
+## probabilistic early expiration
+
+refresh cache before it actually expires:
+
+```typescript
+async function getData(key: string) {
+  const item = await cache.getWithTTL(key)
+  if (!item) {
+    return fetchAndCache(key)
+  }
+
+  const { value, ttl } = item
+  const totalTTL = 3600
+
+  // randomly refresh when ttl gets low
+  const delta = totalTTL - ttl
+  const probability = delta / totalTTL
+
+  if (Math.random() < probability) {
+    // refresh in background
+    fetchAndCache(key).catch(console.error)
+  }
+
+  return value
+}
+```
+
+first request that hits expiring cache refreshes it. others keep using stale data. smooth.
+
+## stale-while-revalidate
+
+serve stale content while refreshing:
+
+```typescript
+async function getData(key: string) {
+  const fresh = await cache.get(key)
+  if (fresh) return fresh
+
+  const stale = await cache.get(`${key}:stale`)
+  if (stale) {
+    // serve stale, refresh async
+    fetchAndCache(key).catch(console.error)
+    return stale
+  }
+
+  return fetchAndCache(key)
+}
+
+async function fetchAndCache(key: string) {
+  const data = await db.query('expensive query')
+  await cache.set(key, data, 3600)
+  await cache.set(`${key}:stale`, data, 7200) // longer ttl
+  return data
+}
+```
+
+## why care
+
+cache stampede kills your db during traffic spikes. scale doesn't help - more servers means more simultaneous requests.
+
+pick one strategy. locks are easiest. probabilistic expiration is smooth. stale-while-revalidate keeps things fast.
+
+just don't let everything expire at once.

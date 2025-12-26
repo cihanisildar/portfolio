@@ -1,51 +1,45 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
+import BlogContent from './BlogContent';
 
-import { calculateReadingTime } from "@/utils/reading-time";
-import matter from "gray-matter";
-import BlogSearch from "./blog-search";
-
-interface Frontmatter {
+interface Post {
+  slug: string;
   title: string;
   description: string;
   date: string;
   tags?: string[];
-  [key: string]: unknown;
 }
 
-interface Post {
-  slug: string;
-  frontmatter: Frontmatter;
-  readingTime: number;
+function getPosts(): Post[] {
+  const postsDirectory = path.join(process.cwd(), 'content/posts');
+  const filenames = fs.readdirSync(postsDirectory);
+
+  const posts = filenames
+    .filter(filename => filename.endsWith('.mdx'))
+    .map(filename => {
+      const filePath = path.join(postsDirectory, filename);
+      const fileContents = fs.readFileSync(filePath, 'utf8');
+      const { data } = matter(fileContents);
+
+      return {
+        slug: filename.replace('.mdx', ''),
+        title: data.title || 'Untitled',
+        description: data.description || '',
+        date: data.date || '',
+        tags: data.tags || [],
+      };
+    });
+
+  // Sort by date, newest first
+  posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  return posts;
 }
 
 export default function BlogPage() {
-  const postsDirectory = path.join(process.cwd(), "content/posts");
-  const fileNames = fs.readdirSync(postsDirectory);
+  const blogDescription = "musings on software design, distributed systems, and the occasional gym update.";
+  const posts = getPosts();
 
-  const posts: Post[] = fileNames.map((fileName) => {
-    const slug = fileName.replace(/\.mdx$/, "");
-    const fullPath = path.join(postsDirectory, fileName);
-    const fileContents = fs.readFileSync(fullPath, "utf8");
-    const { data: frontmatter, content } = matter(fileContents);
-    const readingTime = calculateReadingTime(content);
-
-    return {
-      slug,
-      frontmatter: frontmatter as Frontmatter,
-      readingTime,
-    };
-  });
-
-  return (
-    <div className="max-w-3xl mx-auto py-8 mt-10">
-      <span className="flex items-center justify-center">
-        <h1 className="text-xl font-semibold text-gray-600 text-center underline">
-          my latest explorations
-        </h1>
-      </span>
-
-      <BlogSearch posts={posts} />
-    </div>
-  );
+  return <BlogContent posts={posts} blogDescription={blogDescription} />;
 }
