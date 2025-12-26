@@ -8,7 +8,7 @@ import "./globals.css";
 const font = GeistMono;
 
 export const metadata: Metadata = {
-  title: "cihanisildar.tr",
+  title: "cihanisildar",
   description: "Portfolio Website",
   icons: {
     icon: "/penguin.png",
