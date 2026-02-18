@@ -1,3 +1,6 @@
+import createMDX from "@next/mdx";
+import rehypePrettyCode from "rehype-pretty-code";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Skip ESLint during build — run `npm run lint` separately for faster builds
@@ -13,4 +16,13 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+const withMDX = createMDX({
+  extension: /\.mdx?$/,
+  options: {
+    rehypePlugins: [
+      [rehypePrettyCode, { theme: "one-light", keepBackground: false }],
+    ],
+  },
+});
+
+export default withMDX(nextConfig);
