@@ -1,100 +1,107 @@
 "use client";
 
-import { type CSSProperties, useEffect, useRef } from 'react';
-import { Link } from 'next-view-transitions';
-import styles from '../index.module.css';
+import { Link } from "next-view-transitions";
+import { ArrowLeft } from "lucide-react";
+import { motion } from "framer-motion";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 12 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.07, duration: 0.5, ease: [0.25, 0.8, 0.25, 1] },
+  }),
+};
+
+const interests = [
+  {
+    category: "distributed systems",
+    items: [
+      "horizontal scaling and load balancing (nginx, 3-instance clusters)",
+      "message brokers (rabbitmq) for asynchronous background processing",
+      "distributed caching strategies with redis (caching, pub/sub)",
+      "handling high-concurrency environments in node.js",
+    ],
+  },
+  {
+    category: "performance & infra",
+    items: [
+      "monitoring and observability (prometheus & grafana)",
+      "performance optimization (reducing latency and server costs)",
+      "containerization and orchestration with docker compose",
+      "cloud infrastructure (aws lambda, s3, ses)",
+    ],
+  },
+  {
+    category: "clean architecture & patterns",
+    items: [
+      "implementing domain-driven design and clean software architecture",
+      "rbac (role-based access control) and secure auth flows (jwt/middleware)",
+      "test-driven development (jest) and robust ci/cd pipelines",
+      "managing database state with prisma/orm in production",
+    ],
+  },
+  {
+    category: "ai & modern web",
+    items: [
+      "integrating ai agents (openai api) into business workflows",
+      "next.js 15 app router and react server components (rsc)",
+      "seo optimization (ssr vs ssg) and improving web vitals (ttfb)",
+      "building performant pwas with tailwind and headless ui (radix)",
+    ],
+  },
+];
 
 export default function InterestsPage() {
-  const mainRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const container = mainRef.current;
-    if (!container) return;
-    const nodes = container.querySelectorAll('.animate-textFade');
-    nodes.forEach((el, index) => {
-      (el as HTMLElement).style.animationDelay = `calc(${index + 1} * var(--animation-delay-step))`;
-    });
-  }, []);
-
-  const interests = [
-    {
-      category: "distributed systems",
-      items: [
-        "horizontal scaling and load balancing (nginx, 3-instance clusters)",
-        "message brokers (rabbitmq) for asynchronous background processing",
-        "distributed caching strategies with redis (caching, pub/sub)",
-        "handling high-concurrency environments in node.js"
-      ]
-    },
-    {
-      category: "performance & infra",
-      items: [
-        "monitoring and observability (prometheus & grafana)",
-        "performance optimization (reducing latency and server costs)",
-        "containerization and orchestration with docker compose",
-        "cloud infrastructure (aws lambda, s3, ses)"
-      ]
-    },
-    {
-      category: "clean architecture & patterns",
-      items: [
-        "implementing domain-driven design and clean software architecture",
-        "rbac (role-based access control) and secure auth flows (jwt/middleware)",
-        "test-driven development (jest) and robust ci/cd pipelines",
-        "managing database state with prisma/orm in production"
-      ]
-    },
-    {
-      category: "ai & modern web",
-      items: [
-        "integrating ai agents (openai api) into business workflows",
-        "next.js 15 app router and react server components (rsc)",
-        "seo optimization (ssr vs ssg) and improving web vitals (ttfb)",
-        "building performant pwas with tailwind and headless ui (radix)"
-      ]
-    }
-  ];
-
   return (
-    <main
-      className={`${styles.container} relative leading-normal pl-[2ch] pt-[1lh] pr-[2ch] sm:pt-[2lh] sm:pl-[7ch] min-h-screen pb-[2lh]`}
-      id="new"
-      ref={mainRef}
-      style={
-        {
-          '--animation-delay-step': '50ms',
-        } as CSSProperties
-      }
+    <motion.main
+      initial="hidden"
+      animate="visible"
+      className="max-w-2xl mx-auto px-6 py-20 sm:py-28"
     >
-      <div className="mb-[2lh] animate-textFade">
-        <Link href="/" className="bg-white hover:bg-black hover:text-white underline decoration-dotted underline-offset-4">
-          ← home
+      <motion.div variants={fadeUp} custom={0}>
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors duration-300"
+        >
+          <ArrowLeft size={14} />
+          home
         </Link>
-      </div>
+      </motion.div>
 
-      <h1 className="bg-white animate-textFade inline-block text-zinc-800">interested things</h1>
-      <p className="bg-white text-zinc-600 animate-textFade mt-[0.5lh] max-w-[60ch]">
-        a wall of things i&apos;ve learned, am currently exploring, or find deeply fascinating in the world of software and systems.
-      </p>
+      <motion.div variants={fadeUp} custom={1} className="mt-10">
+        <h1 className="text-3xl font-serif tracking-tight">interests</h1>
+        <p className="mt-3 text-[var(--text-secondary)] leading-relaxed max-w-[50ch]">
+          things i&apos;ve learned, am exploring, or find fascinating in the
+          world of software and systems.
+        </p>
+        <div className="w-10 h-[2px] bg-[var(--accent)] rounded-full mt-6" />
+      </motion.div>
 
-      <div className="mt-[2lh] space-y-[2lh]">
+      <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-4">
         {interests.map((group, groupIndex) => (
-          <div key={groupIndex} className="animate-textFade">
-            <h2 className="font-bold bg-white inline-block mb-[0.5lh] text-zinc-800">{group.category}</h2>
-            <ul className="list-none space-y-[0.5lh]">
+          <motion.section
+            key={groupIndex}
+            variants={fadeUp}
+            custom={groupIndex + 2}
+            className="bg-[var(--bg-subtle)] rounded-2xl p-6 sm:p-7 transition-all duration-300 hover:shadow-[0_4px_24px_rgba(55,51,47,0.06)]"
+          >
+            <h2 className="font-serif italic text-[var(--text-muted)] mb-5">
+              {group.category}
+            </h2>
+            <ul className="list-none space-y-3">
               {group.items.map((item, itemIndex) => (
-                <li key={itemIndex} className="border-l-2 border-zinc-200 pl-4 bg-white/80">
-                  <span className="py-1">
-                    {item}
-                  </span>
+                <li
+                  key={itemIndex}
+                  className="text-[var(--text-secondary)] text-sm leading-relaxed pl-3 border-l-2 border-[var(--border)] hover:border-[var(--accent)] transition-colors duration-300"
+                >
+                  {item}
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.section>
         ))}
       </div>
-    </main>
+    </motion.main>
   );
 }

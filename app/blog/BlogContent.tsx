@@ -1,65 +1,79 @@
 "use client";
 
-import { type CSSProperties, useEffect, useRef } from 'react';
-import { Link } from 'next-view-transitions';
-import styles from '../index.module.css';
-import { TextBackground } from '@/components/TextBackground';
+import { Link } from "next-view-transitions";
+import { ArrowLeft } from "lucide-react";
+import { motion } from "framer-motion";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 12 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.08, duration: 0.5, ease: [0.25, 0.8, 0.25, 1] },
+  }),
+};
 
 interface Post {
-    slug: string;
-    title: string;
-    description: string;
-    date: string;
-    tags?: string[];
+  slug: string;
+  title: string;
+  description: string;
+  date: string;
+  tags?: string[];
 }
 
-export default function BlogContent({ posts, blogDescription }: { posts: Post[], blogDescription: string }) {
-    const mainRef = useRef<HTMLElement>(null);
-
-    useEffect(() => {
-        if (typeof window === 'undefined') return;
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        const container = mainRef.current;
-        if (!container) return;
-        const nodes = container.querySelectorAll('.animate-textFade');
-        nodes.forEach((el, index) => {
-            (el as HTMLElement).style.animationDelay = `calc(${index + 1} * var(--animation-delay-step))`;
-        });
-    }, []);
-
-    return (
-        <main
-            className={`${styles.container} relative leading-normal pl-[2ch] pt-[1lh] pr-[2ch] sm:pt-[2lh] sm:pl-[7ch] min-h-screen`}
-            id="new"
-            ref={mainRef}
-            style={
-                {
-                    '--animation-delay-step': '50ms',
-                } as CSSProperties
-            }
+export default function BlogContent({
+  posts,
+  blogDescription,
+}: {
+  posts: Post[];
+  blogDescription: string;
+}) {
+  return (
+    <motion.main
+      initial="hidden"
+      animate="visible"
+      className="max-w-2xl mx-auto px-6 py-20 sm:py-28"
+    >
+      <motion.div variants={fadeUp} custom={0}>
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors duration-300"
         >
-            <div className="mb-[2lh] animate-textFade">
-                <Link href="/" className="bg-white hover:bg-black hover:text-white underline decoration-dotted underline-offset-4">
-                    ← home
-                </Link>
-            </div>
+          <ArrowLeft size={14} />
+          home
+        </Link>
+      </motion.div>
 
-            <h1 className="bg-white animate-textFade">blog</h1>
-            <p className="mt-[1lh] relative animate-textFade">
-                <TextBackground text={blogDescription} />
-                {blogDescription}
-            </p>
+      <motion.div variants={fadeUp} custom={1} className="mt-10">
+        <h1 className="text-3xl font-serif tracking-tight">blog</h1>
+        <p className="mt-3 text-[var(--text-secondary)] leading-relaxed">
+          {blogDescription}
+        </p>
+        <div className="w-10 h-[2px] bg-[var(--accent)] rounded-full mt-6" />
+      </motion.div>
 
-            <h2 className="font-bold mt-[2lh] bg-white animate-textFade">latest posts</h2>
-            <ul className="list-none mt-[1lh]">
-                {posts.map((post) => (
-                    <li key={post.slug} className="bg-white animate-textFade">
-                        <Link href={`/blog/${post.slug}`} className="underline hover:bg-black hover:text-white">
-                            {post.title}
-                        </Link>
-                    </li>
-                ))}
-            </ul>
-        </main>
-    );
+      <motion.div variants={fadeUp} custom={2} className="mt-10">
+        <h2 className="font-serif italic text-[var(--text-muted)] mb-5">
+          latest posts
+        </h2>
+        <ul className="list-none space-y-1">
+          {posts.map((post, i) => (
+            <motion.li key={post.slug} variants={fadeUp} custom={i + 3}>
+              <Link
+                href={`/blog/${post.slug}`}
+                className="flex items-center justify-between py-3 px-4 -mx-4 rounded-xl hover:bg-[var(--bg-subtle)] transition-all duration-300 group"
+              >
+                <span className="text-[var(--text-secondary)] group-hover:text-[var(--text)] transition-colors duration-300">
+                  {post.title}
+                </span>
+                <span className="text-[var(--text-muted)] text-xs font-serif italic shrink-0 ml-4">
+                  {post.date}
+                </span>
+              </Link>
+            </motion.li>
+          ))}
+        </ul>
+      </motion.div>
+    </motion.main>
+  );
 }

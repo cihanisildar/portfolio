@@ -9,24 +9,40 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        serif: ["var(--font-serif)", "Georgia", "serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
+      },
       animation: {
-        fade: 'fadeIn 1.5s ease both',
-        textFade: 'textFadeIn 0.4s ease both',
+        fade: "fadeIn 1.5s ease both",
+        textFade: "textFadeIn 0.4s ease both",
       },
       keyframes: {
         fadeIn: {
-          from: { opacity: '0' },
-          to: { opacity: '1' },
+          from: { opacity: "0" },
+          to: { opacity: "1" },
         },
         textFadeIn: {
-          from: { opacity: '0', transform: 'translateY(-1lh)' },
-          to: { opacity: '1', transform: 'translateY(0lh)' },
+          from: { opacity: "0", transform: "translateY(-1lh)" },
+          to: { opacity: "1", transform: "translateY(0lh)" },
         },
       },
       screens: {
-        cs: "1420px", // Custom screen size.
+        cs: "1420px",
       },
       colors: {
+        warm: {
+          bg: "var(--bg)",
+          "bg-subtle": "var(--bg-subtle)",
+          text: "var(--text)",
+          "text-secondary": "var(--text-secondary)",
+          "text-muted": "var(--text-muted)",
+          accent: "var(--accent)",
+          "accent-hover": "var(--accent-hover)",
+          border: "var(--border)",
+          selection: "var(--selection)",
+        },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

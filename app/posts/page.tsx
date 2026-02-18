@@ -1,51 +1,52 @@
 "use client";
 
-import {
-    type CSSProperties,
-    useEffect,
-    useRef,
-} from 'react';
-import { Link } from 'next-view-transitions';
-import styles from '../index.module.css';
-import { TextBackground } from '@/components/TextBackground';
+import { Link } from "next-view-transitions";
+import { ArrowLeft } from "lucide-react";
+import { motion } from "framer-motion";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 12 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.08, duration: 0.5, ease: [0.25, 0.8, 0.25, 1] },
+  }),
+};
 
 export default function PostsPage() {
-    const mainRef = useRef<HTMLElement>(null);
-
-    useEffect(() => {
-        if (typeof window === 'undefined') return;
-        const container = mainRef.current;
-        if (!container) return;
-        const nodes = container.querySelectorAll('.animate-textFade');
-        nodes.forEach((el, index) => {
-            (el as HTMLElement).style.animationDelay = `calc(${index + 1} * var(--animation-delay-step))`;
-        });
-    }, []);
-
-    const postsDesc = "a collection of technical deep dives and project logs.";
-
-    return (
-        <main
-            className={`${styles.container} relative leading-normal pl-[2ch] pt-[1lh] pr-[2ch] sm:pt-[2lh] sm:pl-[7ch] min-h-[100dvh] pb-[1lh]`}
-            id="new"
-            ref={mainRef}
-            style={
-                {
-                    '--animation-delay-step': '50ms',
-                } as CSSProperties
-            }
+  return (
+    <motion.main
+      initial="hidden"
+      animate="visible"
+      className="max-w-2xl mx-auto px-6 py-20 sm:py-28"
+    >
+      <motion.div variants={fadeUp} custom={0}>
+        <Link
+          href="/blog"
+          className="inline-flex items-center gap-1.5 text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors duration-300"
         >
-            <nav className="bg-white animate-textFade mb-[2lh]">
-                <Link href="/blog" className="hover:bg-black hover:text-white underline">← back to blog</Link>
-            </nav>
+          <ArrowLeft size={14} />
+          back to blog
+        </Link>
+      </motion.div>
 
-            <h1 className="bg-white animate-textFade">posts</h1>
-            <p className="mt-[1lh] relative animate-textFade">
-                <TextBackground text={postsDesc} />
-                {postsDesc}
-            </p>
+      <motion.div variants={fadeUp} custom={1} className="mt-10">
+        <h1 className="text-3xl font-serif tracking-tight">posts</h1>
+        <p className="mt-3 text-[var(--text-secondary)] leading-relaxed">
+          a collection of technical deep dives and project logs.
+        </p>
+        <div className="w-10 h-[2px] bg-[var(--accent)] rounded-full mt-6" />
+      </motion.div>
 
-            <p className="bg-white animate-textFade mt-[2lh]">nothing here yet. check back later.</p>
-        </main>
-    );
+      <motion.div
+        variants={fadeUp}
+        custom={2}
+        className="mt-12 bg-[var(--bg-subtle)] rounded-2xl p-8 text-center"
+      >
+        <p className="text-[var(--text-muted)] font-serif italic">
+          nothing here yet. check back later.
+        </p>
+      </motion.div>
+    </motion.main>
+  );
 }

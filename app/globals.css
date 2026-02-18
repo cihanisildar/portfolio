@@ -2,85 +2,105 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
-    Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  height: fit-content;
-  min-height: 100vh;
-  font-size: 1rem;
-  background-color: #ffffff;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-/* 🔑 Ana Sayfa Stilleri (#new id'si önemli!) */
-#new a {
-  text-decoration: underline;
-  color: #171717;
-  -webkit-tap-highlight-color: transparent;
-}
-
-#new button {
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* 🔑 KRİTİK: Bu kurallar olmadan yazılar görünmez! */
-#new p:not(#background):not(#background *),
-#new h2:not(#background):not(#background *),
-#new ul:not(#background):not(#background *),
-#new h1:not(#background):not(#background *),
-#new li:not(#background):not(#background *),
-#new .animate-textFade:not(#background):not(#background *) {
-  position: relative;
-  max-width: 70ch;
-  color: #171717;
-  width: fit-content;
-  opacity: 0;
-  animation: fadeIn 0.7s ease-in both;
-  animation-delay: 0.4s;
-  pointer-events: none;
-}
-
-#new a,
-#new button {
-  position: relative;
-  pointer-events: auto !important;
-}
-
-#new a:hover {
-  background: black !important;
-  color: white !important;
-  text-decoration: none;
-}
-
-#new ::selection {
-  background: black;
-  color: white;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
+@layer base {
+  :root {
+    --bg: #fdfbf7;
+    --bg-subtle: #f5f0eb;
+    --text: #37332f;
+    --text-secondary: #5c564f;
+    --text-muted: #948b82;
+    --accent: #b8836a;
+    --accent-hover: #9a6d56;
+    --border: #e8e1d9;
+    --selection: #f0e6dc;
   }
 
-  to {
-    opacity: 1;
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--bg);
+    color: var(--text);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  a:hover {
+    color: var(--accent);
+  }
+
+  ::selection {
+    background: var(--selection);
   }
 }
 
-@keyframes textFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
+/* Footer links – internal vs external */
+.link-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.link-item:hover {
+  color: var(--accent);
+}
+
+.link-icon {
+  opacity: 0.5;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.link-item:hover .link-icon {
+  opacity: 0.9;
+}
+
+.link-external:hover .link-icon {
+  transform: translate(1px, -1px);
+}
+
+.link-internal:hover .link-icon {
+  transform: translateX(2px);
+}
+
+/* Code block styles */
+[data-rehype-pretty-code-fragment] {
+  margin-bottom: 2rem;
+  background-color: transparent !important;
+}
+
+[data-rehype-pretty-code-title] {
+  display: none !important;
+}
+
+pre {
+  background-color: transparent !important;
+  margin: 0 !important;
+}
+
+code {
+  background-color: transparent !important;
+}
+
+[data-line] {
+  padding: 0 1.5rem;
+  border-left: 2px solid transparent;
+  display: block;
+  min-width: 100%;
+}
+
+[data-highlighted-line] {
+  background-color: rgba(184, 131, 106, 0.1) !important;
+  border-left-color: #b8836a;
 }

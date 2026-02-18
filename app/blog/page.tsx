@@ -26,7 +26,7 @@ function getPosts(): Post[] {
         slug: filename.replace('.mdx', ''),
         title: data.title || 'Untitled',
         description: data.description || '',
-        date: data.date || '',
+        date: data.date ? new Date(data.date).toLocaleDateString() : '',
         tags: data.tags || [],
       };
     });

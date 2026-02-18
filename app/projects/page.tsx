@@ -1,139 +1,184 @@
 "use client";
 
-import { type CSSProperties, useEffect, useRef } from 'react';
-import { Github, ExternalLink } from "lucide-react";
-import { Link } from 'next-view-transitions';
-import styles from '../index.module.css';
+import { Github, ExternalLink, ArrowLeft } from "lucide-react";
+import { Link } from "next-view-transitions";
+import { motion } from "framer-motion";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 12 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.07, duration: 0.5, ease: [0.25, 0.8, 0.25, 1] },
+  }),
+};
 
 const projects = [
   {
+    title: "dus360",
+    description:
+      "a next.js web platform that helps dental specialty candidates optimize their ösym placement preferences using real-time data, intelligent predictions, and personalized strategy recommendations.",
+    githubUrl: "",
+    liveUrl: "https://www.dus360.com",
+    tech: ["next.js", "typescript", "analytics", "algorithms"],
+    year: "2025",
+    image: "/project_images/dus360-homepage.png",
+  },
+  {
+    title: "dualicious",
+    description:
+      "location-based platform where businesses create contests and users discover them on an interactive map. features admin moderation, business verification, and map-based contest discovery.",
+    githubUrl: "https://github.com/cihanisildar/dualicious",
+    liveUrl: "https://dualicious.vercel.app/",
+    tech: ["next.js 15", "supabase", "leaflet", "tanstack query"],
+    year: "2025",
+    image: "/project_images/dualicious-homepage.png",
+  },
+  {
+    title: "randevubu",
+    description:
+      "full-stack appointment booking platform with load balancing, redis caching, jwt authentication, and real-time notifications. focused on learning clean architecture patterns.",
+    githubUrl: "https://github.com/cihanisildar/randevubu",
+    liveUrl: "",
+    tech: ["next.js 15", "node.js", "redis", "clean architecture"],
+    year: "2025",
+    image: "/project_images/randevubu-homepage.png",
+  },
+  {
+    title: "tablog",
+    description:
+      "web application that transforms raw excel files into structured, searchable lists in the cloud. manage, query, and organize inventory data through a fast, user-friendly interface.",
+    githubUrl: "",
+    liveUrl: "https://shop-pocket.vercel.app/",
+    tech: ["next.js", "typescript", "excel"],
+    year: "2025",
+    image: "/project_images/tablog-homepage.png",
+  },
+  {
     title: "portfolio",
     description:
-      "a sleek and responsive portfolio website built with next.js and mdx. this project showcases my skills, projects, and blog posts in a modern, easily maintainable format. features include dynamic routing, server-side rendering, and mdx integration.",
+      "a responsive portfolio built with next.js and mdx. dynamic routing, server-side rendering, and mdx integration for blog posts.",
     githubUrl: "https://github.com/cihanisildar/portfolio",
     liveUrl: "https://cihanisildar.tr",
-    tech: ["next.js", "mdx", "typescript", "tailwind css"],
+    tech: ["next.js", "mdx", "typescript", "tailwind"],
     year: "2024",
-    status: "live"
-  },
-  {
-    title: "blog",
-    description:
-      "a full-stack blog application developed with next.js and typescript, featuring a robust admin panel. utilizes aws s3 for media storage and node.js for backend operations.",
-    githubUrl: "https://github.com/cihanisildar/blog",
-    liveUrl: "https://blogclient-ten.vercel.app/",
-    tech: ["next.js", "typescript", "aws s3", "node.js"],
-    year: "2024",
-    status: "live"
-  },
-  {
-    title: "repeeker",
-    description:
-      "full-stack vocabulary learning platform with openai integration. built with next.js, node.js, postgresql, and jwt auth. uses docker and nginx for scalability.",
-    githubUrl: "https://github.com/cihanisildar/repeeker_server",
-    liveUrl: "https://www.repeeker.com/",
-    tech: ["next.js", "node.js", "postgresql", "openai api", "docker"],
-    year: "2024",
-    status: "live"
+    image: "/project_images/portfolio.png",
   },
   {
     title: "bilgeverse",
     description:
-      "full-stack web platform using next.js, neonDB, and jwt auth. implements user management and event scheduling for the bilgeder community.",
+      "full-stack web platform with neonDB and jwt auth. user management and event scheduling for the bilgeder community.",
     githubUrl: "https://github.com/cihanisildar/bilgeverse",
-    liveUrl: "https://bilgeverse.vercel.app",
+    liveUrl: "https://bilgeder.vercel.app/",
     tech: ["next.js", "neondb", "jwt", "api routes"],
-    year: "2023",
-    status: "live"
-  }
+    year: "2024",
+    image: "/project_images/bilgeverse.png",
+  },
 ];
 
 export default function ProjectsPage() {
-  const mainRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const container = mainRef.current;
-    if (!container) return;
-    const nodes = container.querySelectorAll('.animate-textFade');
-    nodes.forEach((el, index) => {
-      (el as HTMLElement).style.animationDelay = `calc(${index + 1} * var(--animation-delay-step))`;
-    });
-  }, []);
-
   return (
-    <main
-      className={`${styles.container} relative leading-normal pl-[2ch] pt-[1lh] pr-[2ch] sm:pt-[2lh] sm:pl-[7ch] min-h-screen pb-[2lh]`}
-      id="new"
-      ref={mainRef}
-      style={
-        {
-          '--animation-delay-step': '50ms',
-        } as CSSProperties
-      }
+    <motion.main
+      initial="hidden"
+      animate="visible"
+      className="max-w-4xl mx-auto px-6 py-20 sm:py-28"
     >
-      <div className="mb-[2lh] animate-textFade">
-        <Link href="/" className="bg-white hover:bg-black hover:text-white underline decoration-dotted underline-offset-4">
-          ← home
+      <motion.div variants={fadeUp} custom={0}>
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors duration-300"
+        >
+          <ArrowLeft size={14} />
+          home
         </Link>
-      </div>
+      </motion.div>
 
-      <h1 className="bg-white animate-textFade inline-block">things i built</h1>
-      <p className="bg-white text-zinc-600 animate-textFade mt-[0.5lh] max-w-[60ch]">
-        a collection of projects i&apos;ve developed, focusing on scalability and performance.
-      </p>
+      <motion.div variants={fadeUp} custom={1} className="mt-10 mb-4">
+        <h1 className="text-3xl font-serif tracking-tight">things i built</h1>
+        <p className="mt-3 text-[var(--text-secondary)] max-w-[55ch] leading-relaxed">
+          side projects and work from internships — each one taught me
+          something new about building real software.
+        </p>
+        <div className="w-10 h-[2px] bg-[var(--accent)] rounded-full mt-6" />
+      </motion.div>
 
-      <div className="mt-[2lh] space-y-[2lh]">
+      <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
         {projects.map((project, index) => (
-          <div key={index} className="animate-textFade border-l-2 border-zinc-200 pl-4 py-2 bg-white/80">
-            <div className="flex items-start justify-between">
-              <h2 className="text-lg font-bold bg-white inline-block">
-                {project.title}
-              </h2>
-              <span className="font-mono text-zinc-400 text-sm bg-white">{project.year}</span>
+          <motion.article
+            key={index}
+            variants={fadeUp}
+            custom={index + 2}
+            className="flex flex-col bg-[var(--bg-subtle)] rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-[0_4px_24px_rgba(55,51,47,0.06)] group"
+          >
+            {/* Image */}
+            <div className="w-full aspect-[16/9] bg-[var(--bg)] overflow-hidden">
+              {project.liveUrl ? (
+                <Link href={project.liveUrl} target="_blank" className="block w-full h-full">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-[1.02]"
+                  />
+                </Link>
+              ) : (
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-full object-contain"
+                />
+              )}
             </div>
 
-            <p className="text-zinc-600 mt-2 text-sm max-w-[60ch]">
-              {project.description}
-            </p>
-
-            <div className="mt-3 flex flex-wrap gap-2">
-              {project.tech.map((tech, techIndex) => (
-                <span
-                  key={techIndex}
-                  className="px-2 py-0.5 text-[10px] text-zinc-500 bg-zinc-100 border border-zinc-200 rounded-sm"
-                >
-                  {tech}
+            {/* Content */}
+            <div className="p-6 flex flex-col flex-grow">
+              <div className="flex items-baseline justify-between gap-2 mb-2">
+                <h2 className="font-serif text-lg">{project.title}</h2>
+                <span className="text-[var(--text-muted)] text-xs font-serif italic shrink-0">
+                  {project.year}
                 </span>
-              ))}
-            </div>
+              </div>
 
-            <div className="mt-4 flex gap-4 text-sm font-medium">
-              {project.githubUrl && (
-                <Link
-                  href={project.githubUrl}
-                  target="_blank"
-                  className="underline hover:bg-black hover:text-white inline-flex items-center gap-1"
-                >
-                  <Github className="w-4 h-4" />
-                  code
-                </Link>
-              )}
-              {project.liveUrl && (
-                <Link
-                  href={project.liveUrl}
-                  target="_blank"
-                  className="underline hover:bg-black hover:text-white inline-flex items-center gap-1"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  live
-                </Link>
-              )}
+              <p className="text-[var(--text-secondary)] text-sm leading-relaxed flex-grow">
+                {project.description}
+              </p>
+
+              <div className="flex flex-wrap gap-1.5 mt-4">
+                {project.tech.map((tech, techIndex) => (
+                  <span
+                    key={techIndex}
+                    className="text-[0.7rem] text-[var(--text-muted)] bg-[var(--bg)] px-2.5 py-1 rounded-full"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              <div className="flex gap-4 mt-5 text-sm">
+                {project.githubUrl && (
+                  <Link
+                    href={project.githubUrl}
+                    target="_blank"
+                    className="inline-flex items-center gap-1.5 text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors duration-300"
+                  >
+                    <Github size={14} />
+                    source
+                  </Link>
+                )}
+                {project.liveUrl && (
+                  <Link
+                    href={project.liveUrl}
+                    target="_blank"
+                    className="inline-flex items-center gap-1.5 text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors duration-300"
+                  >
+                    <ExternalLink size={14} />
+                    live
+                  </Link>
+                )}
+              </div>
             </div>
-          </div>
+          </motion.article>
         ))}
       </div>
-    </main>
+    </motion.main>
   );
 }

@@ -1,115 +1,178 @@
 "use client";
 
-import {
-  type CSSProperties,
-  useEffect,
-  useRef,
-} from 'react';
-import type { NextPage } from 'next';
-import { Link } from 'next-view-transitions';
-import styles from './index.module.css';
-import { TextBackground } from '@/components/TextBackground';
-import { Lightbulb } from 'lucide-react';
+import React from "react";
+import { Link } from "next-view-transitions";
+import { ArrowUpRight } from "lucide-react";
+import { motion } from "framer-motion";
+import StackOrbit from "@/components/StackOrbit";
+import Timeline from "@/components/Timeline";
 
-const Home: NextPage = () => {
-  const mainRef = useRef<HTMLElement>(null);
+const fadeUp = {
+  hidden: { opacity: 0, y: 12 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.08, duration: 0.5, ease: [0.25, 0.8, 0.25, 1] },
+  }),
+};
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const container = mainRef.current;
-    if (!container) return;
-    const nodes = container.querySelectorAll('.animate-textFade');
-    nodes.forEach((el, index) => {
-      (el as HTMLElement).style.animationDelay = `calc(${index + 1} * var(--animation-delay-step))`;
-    });
-  }, []);
+const experiences = [
+  {
+    company: "cloudit",
+    location: "London, United Kingdom",
+    countryCode: "gb",
+    role: "frontend developer intern",
+    period: "sep – oct 2025",
+    bullets: [
+      "built and optimized frontend applications with next.js, integrating firebase for authentication, file uploads, and backend operations.",
+      "improved developer experience by implementing husky for git workflows and storybook for component-driven development.",
+    ],
+  },
+  {
+    company: "emanager",
+    location: "Netherlands",
+    countryCode: "nl",
+    role: "backend developer intern",
+    period: "aug – sep 2025",
+    bullets: [
+      "developed and maintained backend services using django, contributing to project functionality and scalability.",
+      "built and deployed ai-powered agents, exploring practical applications of ai in real-world projects.",
+    ],
+  },
+  {
+    company: "turkcell",
+    location: "Istanbul, Turkey",
+    countryCode: "tr",
+    role: "ai engineer intern",
+    period: "jan – feb 2025",
+    bullets: [
+      "researched ai architectures including transformers, rnn, lstm, and titans.",
+      "built a django application for ai-related tasks and developed chatbot solutions with javascript.",
+    ],
+  },
+];
 
-  const aboutText = "full-stack engineer with international production experience. building scalable web applications with node.js and next.js. focused on distributed systems and performance optimization.";
+const stack = [
+  { label: "languages", items: ["typescript", "javascript", "python"] },
+  { label: "frontend", items: ["react", "next.js", "tailwind"] },
+  { label: "backend", items: ["node.js", "express", "django"] },
+  { label: "data", items: ["postgresql", "redis", "firebase"] },
+  { label: "devops", items: ["docker", "aws", "git"] },
+];
 
+const navLinks = [
+  { label: "projects", href: "/projects" },
+  { label: "blog", href: "/blog" },
+  { label: "contact", href: "/contact" },
+];
+
+const socialLinks = [
+  { label: "github", href: "https://github.com/cihanisildar" },
+  { label: "linkedin", href: "https://linkedin.com/in/cihanisildar" },
+  { label: "twitter", href: "https://x.com/cihanolmalibu" },
+];
+
+const Home = () => {
   return (
-    <main
-      className={`${styles.container} relative leading-normal pl-[2ch] pt-[1lh] pr-[2ch] sm:pt-[2lh] sm:pl-[7ch] min-h-[100dvh] pb-[1lh]`}
-      id="new"
-      ref={mainRef}
-      style={
-        {
-          '--animation-delay-step': '50ms',
-        } as CSSProperties
-      }
+    <motion.main
+      initial="hidden"
+      animate="visible"
+      className="max-w-2xl mx-auto px-6 py-16 sm:py-24"
     >
-      <h1 className="bg-white animate-textFade">m. cihan ışıldar</h1>
-      <p className="block bg-white animate-textFade text-zinc-600">antalya, turkey</p>
+      {/* Hero */}
+      <motion.div variants={fadeUp} custom={0} className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl sm:text-4xl font-serif tracking-tight leading-tight">
+            m. cihan ışıldar
+          </h1>
+          <p className="text-[var(--text-muted)] text-xs mt-3 tracking-[0.25em] uppercase">
+            antalya, turkey
+          </p>
+        </div>
+        <nav className="flex items-center gap-4 pb-1">
+          {navLinks.map((link, i) => (
+            <React.Fragment key={link.label}>
+              <Link
+                href={link.href}
+                className="text-sm font-serif text-[var(--text-muted)] hover:text-[var(--accent)] transition-all duration-300"
+              >
+                {link.label}
+              </Link>
+              {i < navLinks.length - 1 && (
+                <span className="text-[var(--border)] opacity-40 text-xs select-none">/</span>
+              )}
+            </React.Fragment>
+          ))}
+        </nav>
+      </motion.div>
 
-      <Link
-        href="/interests"
-        className="!absolute top-[1lh] right-[2ch] sm:right-[7ch] hover:bg-black h-[1lh] transition-colors !w-[3ch] flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#006aff] rounded-none hover:!text-white bg-white animate-textFade"
-        aria-label="Interests"
+      {/* Accent bar */}
+      <motion.div variants={fadeUp} custom={1} className="mt-7 mb-8">
+        <div className="w-10 h-[2px] bg-[var(--accent)] rounded-full" />
+      </motion.div>
+
+      {/* Bio */}
+      <motion.p
+        variants={fadeUp}
+        custom={2}
+        className="text-[var(--text-secondary)] leading-[1.8] text-[1.05rem] max-w-[54ch]"
       >
-        <Lightbulb size={16} className="fill-current" />
-      </Link>
+        full-stack engineer specialized in scalable backend systems and ai-powered
+        solutions. currently focused on distributed architectures, performance
+        optimization, and production-grade systems across international environments.
+      </motion.p>
 
-      <h2 className="font-bold mt-[2lh] sm:mt-[3lh] bg-white animate-textFade">today</h2>
-      <p className="mt-[0lh] relative animate-textFade">
-        <TextBackground text={aboutText} />
-        {aboutText}
-      </p>
+      {/* Experience & Stack Sections */}
+      <div className="mt-14 space-y-16">
+        {/* Experience Section */}
+        <motion.section variants={fadeUp} custom={3}>
+          <div className="flex items-center gap-4 mb-8">
+            <h2 className="font-serif italic text-xl text-[var(--text-muted)] lowercase">experience</h2>
+            <div className="h-[1px] flex-grow bg-[var(--border)] opacity-60" />
+          </div>
 
-      <h2 className="font-bold mt-[2lh] bg-white animate-textFade">past</h2>
-      <ul className="list-none">
-        <li className="bg-white animate-textFade">
-          <span className="underline">cloudit (uk)</span>, frontend developer intern
-        </li>
-        <li className="bg-white animate-textFade">
-          <span className="underline">emanager (nl)</span>, backend developer intern
-        </li>
-        <li className="bg-white animate-textFade">
-          <span className="underline">turkcell (tr)</span>, ai engineer intern
-        </li>
-      </ul>
+          <div className="space-y-10">
+            <Timeline experiences={experiences} />
+          </div>
+        </motion.section>
 
-      <h2 className="font-bold mt-[2lh] animate-textFade bg-white">stack</h2>
-      <ul className="list-none">
-        <li className="bg-white animate-textFade text-zinc-600">
-          typescript, javascript, python
-        </li>
-        <li className="bg-white animate-textFade text-zinc-600">
-          react, next.js, tailwind, tanstack query
-        </li>
-        <li className="bg-white animate-textFade text-zinc-600">
-          node.js, express, postgresql, redis, docker, aws
-        </li>
-      </ul>
+        {/* Stack Section */}
+        <motion.section variants={fadeUp} custom={4}>
+          <div className="flex items-center gap-4 mb-4">
+            <h2 className="font-serif italic text-xl text-[var(--text-muted)] lowercase">stack</h2>
+            <div className="h-[1px] flex-grow bg-[var(--border)] opacity-60" />
+          </div>
 
-      <h2 className="font-bold mt-[2lh] animate-textFade bg-white">links</h2>
-      <ul className="list-none">
-        <li className="animate-textFade">
-          <Link href="https://github.com/cihanisildar" className="bg-white">
-            github
-          </Link>
-        </li>
-        <li className="animate-textFade">
-          <Link href="https://linkedin.com/in/cihanisildar" className="bg-white">
-            linkedin
-          </Link>
-        </li>
-        <li className="animate-textFade">
-          <Link href="https://x.com/cihanolmalibu" className="bg-white">
-            twitter
-          </Link>
-        </li>
-        <li className="animate-textFade">
-          <Link href="/blog" className="bg-white">
-            blog
-          </Link>
-        </li>
-        <li className="animate-textFade">
-          <Link href="/contact" className="bg-white">
-            contact
-          </Link>
-        </li>
-      </ul>
-    </main>
+          <StackOrbit stack={stack} />
+        </motion.section>
+      </div>
+
+      {/* Social Links Row */}
+      <motion.nav
+        variants={fadeUp}
+        custom={5}
+        className="mt-14 flex items-center gap-x-1 gap-y-3"
+      >
+        {socialLinks.map((link, i) => (
+          <span key={link.label} className="flex items-center">
+            <Link
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-item link-external"
+            >
+              {link.label}
+              <ArrowUpRight size={12} className="link-icon shrink-0" aria-hidden />
+            </Link>
+            {i < socialLinks.length - 1 && (
+              <span className="text-[var(--border)] text-sm mx-2 select-none" aria-hidden>
+                ·
+              </span>
+            )}
+          </span>
+        ))}
+      </motion.nav>
+    </motion.main>
   );
 };
 

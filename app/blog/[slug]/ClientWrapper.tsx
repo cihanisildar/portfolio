@@ -1,59 +1,49 @@
 "use client";
 
-import { type CSSProperties, useEffect, useRef } from 'react';
-import { Link } from 'next-view-transitions';
-import styles from '../../index.module.css';
+import { Link } from "next-view-transitions";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
+
+const footerLinks = [
+  { label: "home", href: "/", external: false },
+  { label: "blog", href: "/blog", external: false },
+  { label: "twitter", href: "https://x.com/cihanolmalibu", external: true },
+  { label: "contact", href: "/contact", external: false },
+];
 
 export default function ClientWrapper({ children }: { children: React.ReactNode }) {
-    const mainRef = useRef<HTMLElement>(null);
-
-    useEffect(() => {
-        if (typeof window === 'undefined') return;
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        const container = mainRef.current;
-        if (!container) return;
-        const nodes = container.querySelectorAll('.animate-textFade');
-        nodes.forEach((el, index) => {
-            (el as HTMLElement).style.animationDelay = `calc(${index + 1} * var(--animation-delay-step))`;
-        });
-    }, []);
-
-    return (
-        <main
-            className={`${styles.container} relative leading-normal pl-[2ch] pt-[1lh] pr-[2ch] sm:pt-[2lh] sm:pl-[7ch] min-h-screen pb-[2lh]`}
-            id="new"
-            ref={mainRef}
-            style={
-                {
-                    '--animation-delay-step': '50ms',
-                } as CSSProperties
-            }
+  return (
+    <main className="max-w-[68ch] mx-auto px-6 py-20 sm:py-28 min-h-screen">
+      <div className="mb-12">
+        <Link
+          href="/blog"
+          className="inline-flex items-center gap-1.5 text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors duration-300"
         >
-            <div className="mb-[2lh] animate-textFade">
-                <Link href="/blog" className="bg-white hover:bg-black hover:text-white underline decoration-dotted underline-offset-4">
-                    ← blog
-                </Link>
-            </div>
+          <ArrowLeft size={14} />
+          blog
+        </Link>
+      </div>
 
-            {children}
+      {children}
 
-            <div className="mt-[4lh] border-t border-zinc-200 pt-[2lh] animate-textFade">
-                <h2 className="font-bold bg-white mb-[1lh]">links</h2>
-                <ul className="list-none">
-                    <li className="animate-textFade">
-                        <Link href="/" className="bg-white">home</Link>
-                    </li>
-                    <li className="animate-textFade">
-                        <Link href="/blog" className="bg-white">blog</Link>
-                    </li>
-                    <li className="animate-textFade">
-                        <Link href="https://x.com/cihanolmalibu" className="bg-white">twitter</Link>
-                    </li>
-                    <li className="animate-textFade">
-                        <Link href="/contact" className="bg-white">contact</Link>
-                    </li>
-                </ul>
-            </div>
-        </main>
-    );
+      <footer className="mt-16 pt-10 border-t border-[var(--border)]">
+        <nav className="flex flex-wrap items-center gap-x-2 gap-y-2">
+          {footerLinks.map((link, i) => (
+            <span key={link.label} className="flex items-center gap-x-2">
+              <Link
+                href={link.href}
+                {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                className="text-sm text-[var(--text-muted)] hover:text-[var(--accent)] inline-flex items-center gap-1 transition-colors duration-300"
+              >
+                {link.label}
+                {link.external && <ArrowUpRight size={10} className="opacity-40" />}
+              </Link>
+              {i < footerLinks.length - 1 && (
+                <span className="text-[var(--border)] text-xs select-none">&middot;</span>
+              )}
+            </span>
+          ))}
+        </nav>
+      </footer>
+    </main>
+  );
 }

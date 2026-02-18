@@ -60,17 +60,21 @@ export default function TableOfContents() {
 
   return (
     <nav className="toc text-xs w-[250px]" aria-label="Table of contents">
-      <span className="block mb-2 ml-4 text-gray-600 font-semibold underline">On this post</span>
-      <ul className="space-y-2  border py-4 px-2 rounded-[8px]">
+      <span className="block mb-2 ml-4 text-[var(--text-muted)] font-medium font-serif italic">
+        on this post
+      </span>
+      <ul className="space-y-1 border border-[var(--border)] py-4 px-2 rounded-md">
         {toc.map((item) => (
           <li key={item.id}>
             <Link
               href={`#${item.id}`}
               onClick={() => handleClick(item.id)}
-              className={`block px-4 py-2 rounded transition duration-200 ease-in-out
-                ${activeId === item.id 
-                  ? "bg-gray-200 text-gray-900" 
-                  : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"}
+              className={`block px-4 py-2 rounded-md transition-colors duration-300
+                ${
+                  activeId === item.id
+                    ? "bg-[var(--bg-subtle)] text-[var(--text)]"
+                    : "text-[var(--text-muted)] hover:bg-[var(--bg-subtle)] hover:text-[var(--text-secondary)]"
+                }
               `}
             >
               {item.text}
