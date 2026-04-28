@@ -61,15 +61,15 @@ const Timeline: React.FC<TimelineProps> = ({ experiences }) => {
 
                     <div className="flex flex-col gap-0.5">
                         <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-y-1 gap-x-4">
-                            <div className="flex items-baseline gap-2.5">
-                                <h3 className="text-lg font-serif tracking-tight text-[var(--text)] group-hover:text-[var(--accent)] transition-colors duration-300">
+                            <div className="flex items-baseline gap-2.5 flex-wrap">
+                                <h3 className="text-[15px] font-medium tracking-tight text-[var(--text)] group-hover:text-[var(--accent)] transition-colors duration-300">
                                     {exp.company}
                                 </h3>
-                                <span className="text-[var(--text-secondary)] text-[12px] lowercase tracking-tight font-medium opacity-80 group-hover:opacity-100 transition-opacity">
+                                <span className="text-[var(--text-secondary)] text-[12px] lowercase tracking-tight font-light opacity-90 group-hover:opacity-100 transition-opacity">
                                     {exp.role}
                                     {exp.countryCode !== "tr" && (
-                                        <span className="ml-2 text-[11px] font-sans font-medium text-[var(--accent)]/80">
-                                            (remote)
+                                        <span className="ml-2 text-[10px] uppercase tracking-[0.2em] font-medium text-[var(--accent)]/80">
+                                            remote
                                         </span>
                                     )}
                                 </span>
@@ -81,19 +81,19 @@ const Timeline: React.FC<TimelineProps> = ({ experiences }) => {
                                         alt=""
                                         className="w-3.5 h-auto rounded-[1px] shadow-sm shadow-black/5"
                                     />
-                                    <span className="uppercase tracking-wider font-bold text-[9px] text-[var(--text-secondary)]">
+                                    <span className="uppercase tracking-[0.2em] font-medium text-[9px] text-[var(--text-secondary)]">
                                         {exp.countryCode === "gb" ? "uk" : exp.countryCode}
                                     </span>
                                 </div>
-                                <span className="font-serif italic lowercase opacity-80">{exp.period}</span>
+                                <span className="lowercase tracking-tight font-light opacity-80">{exp.period}</span>
                             </div>
                         </div>
 
-                        <ul className="mt-2 space-y-1">
+                        <ul className="mt-2.5 space-y-1.5">
                             {exp.bullets.map((bullet, j) => (
                                 <li
                                     key={j}
-                                    className="text-[var(--text-muted)] text-[12.5px] leading-relaxed pl-3.5 relative before:content-[''] before:absolute before:left-0 before:top-[9px] before:w-1 before:h-1 before:rounded-full before:bg-[var(--border)]/60 group-hover:before:bg-[var(--accent)]/40 before:transition-colors"
+                                    className="text-[var(--text-muted)] text-[12.5px] leading-relaxed font-light pl-3.5 relative before:content-[''] before:absolute before:left-0 before:top-[9px] before:w-1 before:h-1 before:rounded-full before:bg-[var(--border)] group-hover:before:bg-[var(--accent)]/50 before:transition-colors"
                                 >
                                     {bullet}
                                 </li>

@@ -59,7 +59,7 @@ const BlogPost = async ({ params }: BlogPostProps) => {
   if (!PostComponent || !postData) {
     return (
       <div className="w-full min-h-screen flex items-center justify-center">
-        <h1 className="text-2xl font-serif text-[var(--text-muted)]">
+        <h1 className="text-2xl font-light tracking-tight text-[var(--text-muted)]">
           post not found
         </h1>
       </div>
@@ -71,18 +71,18 @@ const BlogPost = async ({ params }: BlogPostProps) => {
 
   return (
     <ClientWrapper>
-      <header className="mb-10">
-        <h1 className="text-2xl sm:text-3xl font-serif tracking-tight leading-snug">
+      <header className="mb-12">
+        <h1 className="text-2xl sm:text-[2rem] font-light tracking-tight leading-[1.2]">
           {frontmatter.title}
         </h1>
-        <div className="flex items-center gap-3 text-[var(--text-muted)] text-sm mt-4">
+        <div className="flex items-center gap-3 text-[var(--text-muted)] text-[11px] tracking-[0.2em] uppercase font-medium mt-5">
           {frontmatter.date && (
             <span>{new Date(frontmatter.date).toLocaleDateString()}</span>
           )}
-          <span className="text-[var(--border)]">/</span>
+          <span className="text-[var(--border)]">·</span>
           <span>{readingTime} min read</span>
         </div>
-        <div className="w-10 h-[2px] bg-[var(--accent)] rounded-full mt-6" />
+        <div className="w-8 h-[1.5px] bg-[var(--accent)] rounded-full mt-7" />
       </header>
 
       <div className="w-full mb-16">

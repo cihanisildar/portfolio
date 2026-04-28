@@ -4,15 +4,21 @@
 
 @layer base {
   :root {
-    --bg: #fdfbf7;
-    --bg-subtle: #f5f0eb;
-    --text: #37332f;
-    --text-secondary: #5c564f;
-    --text-muted: #948b82;
-    --accent: #b8836a;
-    --accent-hover: #9a6d56;
-    --border: #e8e1d9;
+    --bg: #ffffff;
+    --bg-subtle: #f7f6f4;
+    --text: #1c1b1a;
+    --text-secondary: #5a5754;
+    --text-muted: #9b9794;
+    --accent: #a87a62;
+    --accent-hover: #8c6249;
+    --border: #ebe8e2;
     --selection: #f0e6dc;
+
+    /* muted, dusty section tints — desaturated on purpose */
+    --tint-sand: #f6f3ed;
+    --tint-sage: #eef1ec;
+    --tint-mist: #eef0f2;
+    --tint-rose: #f4eee9;
   }
 
   * {
@@ -26,6 +32,10 @@
     min-height: 100vh;
     background-color: var(--bg);
     color: var(--text);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.005em;
   }
 
   a {

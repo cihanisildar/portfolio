@@ -11,7 +11,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       <h1
         {...props}
         className={cn(
-          "text-xl font-serif font-normal mt-10 mb-4",
+          "text-2xl font-light tracking-tight mt-10 mb-4",
           props.className
         )}
       />
@@ -26,7 +26,10 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         <h2
           id={id}
           {...props}
-          className={cn("font-serif text-lg mt-8 mb-3", props.className)}
+          className={cn(
+            "text-lg font-medium tracking-tight mt-8 mb-3",
+            props.className
+          )}
         />
       );
     },

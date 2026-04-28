@@ -60,7 +60,7 @@ export default function TableOfContents() {
 
   return (
     <nav className="toc text-xs w-[250px]" aria-label="Table of contents">
-      <span className="block mb-2 ml-4 text-[var(--text-muted)] font-medium font-serif italic">
+      <span className="block mb-3 ml-4 text-[var(--text-muted)] text-[10px] tracking-[0.28em] uppercase font-medium">
         on this post
       </span>
       <ul className="space-y-1 border border-[var(--border)] py-4 px-2 rounded-md">

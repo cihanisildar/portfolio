@@ -31,19 +31,21 @@ export default function PostsPage() {
       </motion.div>
 
       <motion.div variants={fadeUp} custom={1} className="mt-10">
-        <h1 className="text-3xl font-serif tracking-tight">posts</h1>
-        <p className="mt-3 text-[var(--text-secondary)] leading-relaxed">
+        <h1 className="text-3xl sm:text-4xl font-light tracking-tight leading-[1.15]">
+          posts
+        </h1>
+        <p className="mt-4 text-[var(--text-secondary)] leading-[1.8] font-light">
           a collection of technical deep dives and project logs.
         </p>
-        <div className="w-10 h-[2px] bg-[var(--accent)] rounded-full mt-6" />
+        <div className="w-8 h-[1.5px] bg-[var(--accent)] rounded-full mt-7" />
       </motion.div>
 
       <motion.div
         variants={fadeUp}
         custom={2}
-        className="mt-12 bg-[var(--bg-subtle)] rounded-2xl p-8 text-center"
+        className="mt-14 bg-[var(--tint-sand)] rounded-2xl p-10 text-center"
       >
-        <p className="text-[var(--text-muted)] font-serif italic">
+        <p className="text-[var(--text-muted)] text-[13px] tracking-tight font-light">
           nothing here yet. check back later.
         </p>
       </motion.div>

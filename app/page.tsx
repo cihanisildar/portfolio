@@ -4,8 +4,89 @@ import React from "react";
 import { Link } from "next-view-transitions";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
-import StackOrbit from "@/components/StackOrbit";
 import Timeline from "@/components/Timeline";
+import {
+  SiTypescript, SiJavascript, SiPython,
+  SiReact, SiNextdotjs, SiTailwindcss,
+  SiNodedotjs, SiExpress, SiDjango,
+  SiPostgresql, SiRedis, SiFirebase,
+  SiDocker, SiGit,
+  SiGo, SiReactquery, SiPrisma, SiRabbitmq,
+  SiSentry, SiTurborepo, SiMinio,
+  SiOpenai, SiRadixui, SiGrafana, SiPrometheus,
+  SiGithub, SiX,
+} from "react-icons/si";
+import { FaAws, FaLinkedinIn } from "react-icons/fa";
+
+const techIcons: Record<string, React.ElementType> = {
+  "typescript": SiTypescript,
+  "javascript": SiJavascript,
+  "javascript (es6+)": SiJavascript,
+  "python": SiPython,
+  "go": SiGo,
+  "sql": SiPostgresql,
+  "react": SiReact,
+  "next.js": SiNextdotjs,
+  "tailwind": SiTailwindcss,
+  "tailwind css": SiTailwindcss,
+  "tanstack query": SiReactquery,
+  "radix ui": SiRadixui,
+  "node.js": SiNodedotjs,
+  "express": SiExpress,
+  "django": SiDjango,
+  "prisma orm": SiPrisma,
+  "rabbitmq": SiRabbitmq,
+  "postgresql": SiPostgresql,
+  "redis": SiRedis,
+  "firebase": SiFirebase,
+  "docker": SiDocker,
+  "aws": FaAws,
+  "git": SiGit,
+  "sentry": SiSentry,
+  "turborepo": SiTurborepo,
+  "minio (s3)": SiMinio,
+  "llm orchestration": SiOpenai,
+  "rag": SiOpenai,
+  "vector search (pgvector)": SiPostgresql,
+  "ai agents": SiOpenai,
+  "grafana": SiGrafana,
+  "prometheus": SiPrometheus,
+};
+
+const techColors: Record<string, string> = {
+  "typescript": "#3178C6",
+  "javascript": "#F7DF1E",
+  "javascript (es6+)": "#F7DF1E",
+  "python": "#3776AB",
+  "go": "#00ADD8",
+  "sql": "#4479A1",
+  "react": "#61DAFB",
+  "next.js": "#000000",
+  "tailwind": "#06B6D4",
+  "tailwind css": "#06B6D4",
+  "tanstack query": "#FF4154",
+  "radix ui": "#6E56CF",
+  "node.js": "#339933",
+  "express": "#444444",
+  "django": "#0C4B33",
+  "prisma orm": "#2D3748",
+  "rabbitmq": "#FF6600",
+  "postgresql": "#4169E1",
+  "redis": "#DC382D",
+  "firebase": "#FFCA28",
+  "docker": "#2496ED",
+  "aws": "#FF9900",
+  "git": "#F05032",
+  "sentry": "#362D59",
+  "turborepo": "#EF4444",
+  "minio (s3)": "#C72E49",
+  "llm orchestration": "#412991",
+  "rag": "#4B5563",
+  "vector search (pgvector)": "#336791",
+  "ai agents": "#EF4444",
+  "grafana": "#F46800",
+  "prometheus": "#E6522C",
+};
 
 const fadeUp = {
   hidden: { opacity: 0, y: 12 },
@@ -53,11 +134,11 @@ const experiences = [
 ];
 
 const stack = [
-  { label: "languages", items: ["typescript", "javascript", "python"] },
-  { label: "frontend", items: ["react", "next.js", "tailwind"] },
-  { label: "backend", items: ["node.js", "express", "django"] },
-  { label: "data", items: ["postgresql", "redis", "firebase"] },
-  { label: "devops", items: ["docker", "aws", "git"] },
+  { label: "languages", items: ["javascript (es6+)", "typescript", "python", "sql", "go"] },
+  { label: "frontend", items: ["react", "next.js", "tailwind css", "tanstack query", "radix ui"] },
+  { label: "backend", items: ["node.js", "express", "django", "prisma orm", "rabbitmq"] },
+  { label: "ai engineering", items: ["llm orchestration", "rag", "vector search (pgvector)", "ai agents"] },
+  { label: "cloud & devops", items: ["docker", "postgresql", "redis", "minio (s3)", "sentry", "turborepo", "grafana", "prometheus"] },
 ];
 
 const navLinks = [
@@ -67,112 +148,142 @@ const navLinks = [
 ];
 
 const socialLinks = [
-  { label: "github", href: "https://github.com/cihanisildar" },
-  { label: "linkedin", href: "https://linkedin.com/in/cihanisildar" },
-  { label: "twitter", href: "https://x.com/cihanolmalibu" },
+  { label: "github", href: "https://github.com/cihanisildar", icon: SiGithub, color: "#9B6DFF" },
+  { label: "linkedin", href: "https://linkedin.com/in/cihanisildar", icon: FaLinkedinIn, color: "#0A66C2" },
+  { label: "twitter", href: "https://x.com/cihanolmalibu", icon: SiX, color: "#1D9BF0" },
 ];
 
 const Home = () => {
   return (
-    <motion.main
+    <motion.div
       initial="hidden"
       animate="visible"
-      className="max-w-2xl mx-auto px-6 py-16 sm:py-24"
+      className="lg:flex lg:min-h-screen"
     >
-      {/* Hero */}
-      <motion.div variants={fadeUp} custom={0} className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-        <div>
-          <h1 className="text-3xl sm:text-4xl font-serif tracking-tight leading-tight">
-            m. cihan ışıldar
-          </h1>
-          <p className="text-[var(--text-muted)] text-xs mt-3 tracking-[0.25em] uppercase">
-            antalya, turkey
-          </p>
-        </div>
-        <nav className="flex items-center gap-4 pb-1">
+      {/* ── Left Panel ── */}
+      <div className="lg:sticky lg:top-0 lg:h-screen lg:w-[54%] lg:border-r lg:border-[var(--border)] flex flex-col justify-between px-8 py-12 sm:px-12 sm:py-14 xl:px-16 xl:py-16 overflow-y-auto">
+
+        {/* Top: nav */}
+        <motion.nav
+          variants={fadeUp}
+          custom={0}
+          className="flex items-center gap-5"
+        >
           {navLinks.map((link, i) => (
             <React.Fragment key={link.label}>
               <Link
                 href={link.href}
-                className="text-sm font-serif text-[var(--text-muted)] hover:text-[var(--accent)] transition-all duration-300"
+                className="text-[11px] tracking-[0.28em] uppercase font-medium text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors duration-300"
               >
                 {link.label}
               </Link>
               {i < navLinks.length - 1 && (
-                <span className="text-[var(--border)] opacity-40 text-xs select-none">/</span>
+                <span className="text-[var(--border)] text-xs select-none">·</span>
               )}
             </React.Fragment>
           ))}
-        </nav>
-      </motion.div>
+        </motion.nav>
 
-      {/* Accent bar */}
-      <motion.div variants={fadeUp} custom={1} className="mt-7 mb-8">
-        <div className="w-10 h-[2px] bg-[var(--accent)] rounded-full" />
-      </motion.div>
+        {/* Middle: isim + bio yan yana, stack altta */}
+        <motion.div variants={fadeUp} custom={1} className="space-y-8 my-12 lg:my-0">
 
-      {/* Bio */}
-      <motion.p
-        variants={fadeUp}
-        custom={2}
-        className="text-[var(--text-secondary)] leading-[1.8] text-[1.05rem] max-w-[54ch]"
-      >
-        full-stack engineer specialized in scalable backend systems and ai-powered
-        solutions. currently focused on distributed architectures, performance
-        optimization, and production-grade systems across international environments.
-      </motion.p>
-
-      {/* Experience & Stack Sections */}
-      <div className="mt-14 space-y-16">
-        {/* Experience Section */}
-        <motion.section variants={fadeUp} custom={3}>
-          <div className="flex items-center gap-4 mb-8">
-            <h2 className="font-serif italic text-xl text-[var(--text-muted)] lowercase">experience</h2>
-            <div className="h-[1px] flex-grow bg-[var(--border)] opacity-60" />
+          {/* İsim (sol) + Bio (sağ) */}
+          <div className="flex gap-8 items-center">
+            <div className="shrink-0">
+              <h1 className="text-3xl sm:text-4xl xl:text-[3.25rem] font-light tracking-tight text-[var(--text)] leading-none">
+                <span className="block mb-4">cihan</span>
+                <span className="block">ışıldar</span>
+              </h1>
+            </div>
+            <p className="text-[var(--text-secondary)] leading-[1.85] text-[0.875rem] font-light">
+              full-stack engineer specialized in scalable backend systems and
+              ai-powered solutions. currently focused on distributed architectures,
+              performance optimization, and production-grade systems across
+              international environments.
+            </p>
           </div>
 
-          <div className="space-y-10">
-            <Timeline experiences={experiences} />
-          </div>
-        </motion.section>
+          {/* Divider */}
+          <div className="h-[1px] bg-[var(--border)] -mx-8 sm:-mx-12 xl:-mx-16" />
 
-        {/* Stack Section */}
-        <motion.section variants={fadeUp} custom={4}>
-          <div className="flex items-center gap-4 mb-4">
-            <h2 className="font-serif italic text-xl text-[var(--text-muted)] lowercase">stack</h2>
-            <div className="h-[1px] flex-grow bg-[var(--border)] opacity-60" />
-          </div>
+          {/* Stack */}
+          <dl className="space-y-2.5">
+            {stack.map((group) => (
+              <div key={group.label} className="flex items-start gap-4">
+                <dt className="text-[9px] tracking-[0.26em] uppercase font-medium text-[var(--text-secondary)] w-[140px] shrink-0 pt-[5px] whitespace-nowrap">
+                  {group.label}
+                </dt>
+                <dd className="flex flex-wrap gap-1.5">
+                  {group.items.map((item) => {
+                    const Icon = techIcons[item];
+                    const color = techColors[item];
+                    return (
+                      <span
+                        key={item}
+                        className="inline-flex items-center gap-1.5 px-3 py-[5px] rounded-full text-[11px] font-medium text-[var(--text-secondary)] bg-[var(--bg-subtle)] border border-[var(--border)] leading-none hover:border-[var(--accent)]/30 hover:bg-[var(--selection)] transition-colors duration-200 cursor-default"
+                      >
+                        {Icon && <Icon size={12} style={{ color }} />}
+                        {item}
+                      </span>
+                    );
+                  })}
+                </dd>
+              </div>
+            ))}
+          </dl>
 
-          <StackOrbit stack={stack} />
-        </motion.section>
+        </motion.div>
+
+        {/* Bottom: location + socials */}
+        <motion.div variants={fadeUp} custom={2} className="space-y-8">
+          {/* Divider */}
+          <div className="h-[1px] bg-[var(--border)] -mx-8 sm:-mx-12 xl:-mx-16" />
+
+          <div className="space-y-3">
+            <p className="text-[var(--text-muted)] text-[10px] tracking-[0.32em] uppercase font-medium">
+              antalya, turkey
+            </p>
+            <nav className="flex items-center gap-3 flex-wrap">
+              {socialLinks.map((link) => {
+                const Icon = link.icon;
+                return (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--bg-subtle)] hover:border-[var(--accent)]/30 transition-all duration-200"
+                  >
+                    <Icon size={13} style={{ color: link.color }} />
+                    <span className="text-[11px] tracking-[0.2em] uppercase font-medium text-[var(--text-muted)] group-hover:text-[var(--text)] transition-colors duration-200">
+                      {link.label}
+                    </span>
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
+        </motion.div>
       </div>
 
-      {/* Social Links Row */}
-      <motion.nav
-        variants={fadeUp}
-        custom={5}
-        className="mt-14 flex items-center gap-x-1 gap-y-3"
-      >
-        {socialLinks.map((link, i) => (
-          <span key={link.label} className="flex items-center">
-            <Link
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="link-item link-external"
-            >
-              {link.label}
-              <ArrowUpRight size={12} className="link-icon shrink-0" aria-hidden />
-            </Link>
-            {i < socialLinks.length - 1 && (
-              <span className="text-[var(--border)] text-sm mx-2 select-none" aria-hidden>
-                ·
-              </span>
-            )}
-          </span>
-        ))}
-      </motion.nav>
-    </motion.main>
+      {/* ── Right Panel ── */}
+      <div className="lg:w-[46%] flex flex-col border-t border-[var(--border)] lg:border-t-0">
+
+        {/* Experience */}
+        <motion.section
+          variants={fadeUp}
+          custom={2}
+          className="px-8 py-10 sm:px-10 sm:py-12 xl:px-12 xl:py-14"
+        >
+          <h2 className="text-[10px] tracking-[0.32em] uppercase font-medium text-[var(--text-muted)] mb-8">
+            experience
+          </h2>
+          <Timeline experiences={experiences} />
+        </motion.section>
+
+
+      </div>
+    </motion.div>
   );
 };
 

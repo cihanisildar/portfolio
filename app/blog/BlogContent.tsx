@@ -45,28 +45,52 @@ export default function BlogContent({
       </motion.div>
 
       <motion.div variants={fadeUp} custom={1} className="mt-10">
-        <h1 className="text-3xl font-serif tracking-tight">blog</h1>
-        <p className="mt-3 text-[var(--text-secondary)] leading-relaxed">
+        <h1 className="text-3xl sm:text-4xl font-light tracking-tight leading-[1.15]">
+          blog
+        </h1>
+        <p className="mt-4 text-[var(--text-secondary)] leading-[1.8] font-light max-w-[55ch]">
           {blogDescription}
         </p>
-        <div className="w-10 h-[2px] bg-[var(--accent)] rounded-full mt-6" />
+        <div className="w-8 h-[1.5px] bg-[var(--accent)] rounded-full mt-7" />
       </motion.div>
 
-      <motion.div variants={fadeUp} custom={2} className="mt-10">
-        <h2 className="font-serif italic text-[var(--text-muted)] mb-5">
-          latest posts
-        </h2>
-        <ul className="list-none space-y-1">
+      <motion.div variants={fadeUp} custom={2} className="mt-14">
+        <div className="flex items-center gap-4 mb-6">
+          <h2 className="text-[10px] tracking-[0.32em] uppercase font-medium text-[var(--text-muted)]">
+            latest posts
+          </h2>
+          <div className="h-[1px] flex-grow bg-[var(--border)]" />
+        </div>
+        <ul className="list-none divide-y divide-[var(--border)]">
           {posts.map((post, i) => (
             <motion.li key={post.slug} variants={fadeUp} custom={i + 3}>
               <Link
                 href={`/blog/${post.slug}`}
-                className="flex items-center justify-between py-3 px-4 -mx-4 rounded-xl hover:bg-[var(--bg-subtle)] transition-all duration-300 group"
+                className="flex items-start justify-between py-5 group gap-6"
               >
-                <span className="text-[var(--text-secondary)] group-hover:text-[var(--text)] transition-colors duration-300">
-                  {post.title}
-                </span>
-                <span className="text-[var(--text-muted)] text-xs font-serif italic shrink-0 ml-4">
+                <div className="space-y-1.5 min-w-0">
+                  <span className="text-[15px] text-[var(--text)] group-hover:text-[var(--accent)] transition-colors duration-300 font-medium block">
+                    {post.title}
+                  </span>
+                  {post.description && (
+                    <span className="text-[13px] text-[var(--text-muted)] font-light leading-relaxed block truncate">
+                      {post.description}
+                    </span>
+                  )}
+                  {post.tags && post.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {post.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-2 py-[3px] rounded-full text-[10px] font-medium text-[var(--accent)] bg-[var(--selection)] border border-[var(--accent)]/20 leading-none"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <span className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase font-medium shrink-0 mt-1">
                   {post.date}
                 </span>
               </Link>

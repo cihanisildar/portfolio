@@ -1,21 +1,16 @@
 import LayoutContent from "@/components/layout-content";
 import type { Metadata } from "next";
 import { ViewTransitions } from "next-view-transitions";
-import { DM_Sans, Instrument_Serif } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import { GeistMono } from "geist/font/mono";
 import "prismjs/themes/prism-okaidia.css";
 import "./globals.css";
 
-const dmSans = DM_Sans({
+const montserrat = Montserrat({
   subsets: ["latin"],
+  weight: ["200", "300", "400", "500", "600"],
   variable: "--font-sans",
-});
-
-const instrumentSerif = Instrument_Serif({
-  weight: "400",
-  style: ["normal", "italic"],
-  subsets: ["latin"],
-  variable: "--font-serif",
+  display: "swap",
 });
 
 const geistMono = GeistMono;
@@ -39,10 +34,10 @@ export default function RootLayout({
     <ViewTransitions>
       <html lang="en">
         <body
-          className={`${dmSans.variable} ${instrumentSerif.variable} ${geistMono.variable} antialiased relative`}
+          className={`${montserrat.variable} ${geistMono.variable} antialiased relative`}
           suppressHydrationWarning
         >
-          <LayoutContent fontClass={dmSans.className}>
+          <LayoutContent fontClass={montserrat.className}>
             {children}
           </LayoutContent>
         </body>

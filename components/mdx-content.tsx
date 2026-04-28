@@ -11,11 +11,11 @@ type BlockquoteProps = ComponentPropsWithoutRef<"blockquote">;
 
 const components: MDXComponents = {
   h1: (props: HeadingProps) => (
-    <h1 className="font-serif font-normal mb-0 fade-in" {...props} />
+    <h1 className="font-light tracking-tight mb-0 fade-in" {...props} />
   ),
   h2: (props: HeadingProps) => (
     <h2
-      className="text-[var(--text)] font-serif font-normal mt-8 mb-3 w-full"
+      className="text-[var(--text)] font-medium tracking-tight mt-8 mb-3 w-full"
       {...props}
     />
   ),
