@@ -16,28 +16,7 @@ interface TimelineProps {
     experiences: Experience[];
 }
 
-const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.04,
-            delayChildren: 0
-        }
-    }
-};
-
-const itemVariants = {
-    hidden: { opacity: 0, x: -8 },
-    visible: {
-        opacity: 1,
-        x: 0,
-        transition: {
-            duration: 0.35,
-            ease: [0.25, 0.8, 0.25, 1]
-        }
-    }
-};
+import { containerVariants, itemVariants } from "@/constants/animations";
 
 const Timeline: React.FC<TimelineProps> = ({ experiences }) => {
     return (

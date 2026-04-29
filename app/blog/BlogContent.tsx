@@ -4,14 +4,7 @@ import { Link } from "next-view-transitions";
 import { ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 12 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.08, duration: 0.5, ease: [0.25, 0.8, 0.25, 1] },
-  }),
-};
+import { fadeUp } from "@/constants/animations";
 
 interface Post {
   slug: string;

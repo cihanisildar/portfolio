@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { orbitConfigs } from "@/constants/animations";
 
 interface StackGroup {
     label: string;
@@ -15,15 +16,6 @@ interface StackOrbitProps {
 const StackOrbit: React.FC<StackOrbitProps> = ({ stack }) => {
     const [hoveredItem, setHoveredItem] = useState<string | null>(null);
     const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
-
-    // Config for orbits with responsive multipliers
-    const orbitConfigs = [
-        { radius: 190, duration: 60, direction: 1, color: "#b8836a" },
-        { radius: 155, duration: 50, direction: -1, color: "#948b82" },
-        { radius: 120, duration: 40, direction: 1, color: "#b8836a" },
-        { radius: 85, duration: 30, direction: -1, color: "#948b82" },
-        { radius: 55, duration: 25, direction: 1, color: "#b8836a" },
-    ];
 
     return (
         <div className="relative w-full h-[400px] sm:h-[500px] flex items-center justify-center overflow-hidden py-10 rounded-3xl bg-[var(--bg-subtle)]/30 border border-[var(--border)]/40 mt-8 group/orbits [perspective:1000px]">

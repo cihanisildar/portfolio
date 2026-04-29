@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import BlogContent from './BlogContent';
+import { blogDescription } from "@/constants/metadata";
 
 interface Post {
   slug: string;
@@ -37,8 +38,8 @@ function getPosts(): Post[] {
   return posts;
 }
 
+
 export default function BlogPage() {
-  const blogDescription = "musings on software design, distributed systems, and the occasional gym update.";
   const posts = getPosts();
 
   return <BlogContent posts={posts} blogDescription={blogDescription} />;

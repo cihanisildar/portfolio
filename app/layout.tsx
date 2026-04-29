@@ -15,15 +15,9 @@ const montserrat = Montserrat({
 
 const geistMono = GeistMono;
 
-export const metadata: Metadata = {
-  title: "cihanisildar",
-  description: "Portfolio Website",
-  icons: {
-    icon: "/penguin.png",
-    shortcut: "/penguin.png",
-    apple: "/penguin.png",
-  },
-};
+import { siteMetadata } from "@/constants/metadata";
+
+export const metadata: Metadata = siteMetadata;
 
 export default function RootLayout({
   children,
