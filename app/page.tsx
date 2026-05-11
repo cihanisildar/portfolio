@@ -20,7 +20,7 @@ const Home = () => {
       className="lg:flex lg:min-h-screen"
     >
       {/* ── Left Panel ── */}
-      <div className="lg:sticky lg:top-0 lg:h-screen lg:w-[54%] lg:border-r lg:border-[var(--border)] flex flex-col justify-between px-8 py-12 sm:px-12 sm:py-14 xl:px-16 xl:py-16 overflow-y-auto">
+      <div className="lg:sticky lg:top-0 lg:h-screen lg:w-[54%] lg:border-r lg:border-[var(--border)] flex flex-col justify-between px-8 py-12 sm:px-12 sm:py-14 xl:px-16 xl:py-16 overflow-y-auto [scrollbar-gutter:stable]">
 
         {/* Top: nav */}
         <motion.nav
@@ -47,8 +47,8 @@ const Home = () => {
         <motion.div variants={fadeUp} custom={1} className="space-y-8 my-12 lg:my-0">
 
           {/* İsim (sol) + Bio (sağ) */}
-          <div className="flex gap-8 items-center">
-            <div className="w-[180px] shrink-0">
+          <div className="grid grid-cols-1 sm:grid-cols-[130px_1fr] lg:grid-cols-[170px_1fr] gap-4 sm:gap-8 items-center">
+            <div className="shrink-0">
               <h1 className="text-3xl sm:text-4xl xl:text-[3.25rem] font-light tracking-tight text-[var(--text)] leading-none">
                 <span className="block mb-4">cihan</span>
                 <span className="block">ışıldar</span>
@@ -68,18 +68,18 @@ const Home = () => {
           {/* Stack */}
           <dl className="space-y-2.5">
             {stack.map((group) => (
-              <div key={group.label} className="flex items-start gap-8">
-                <dt className="text-[11px] tracking-[0.28em] uppercase font-medium text-[var(--text-secondary)] w-[180px] shrink-0 pt-[5px] whitespace-nowrap">
+              <div key={group.label} className="grid grid-cols-1 sm:grid-cols-[130px_1fr] lg:grid-cols-[170px_1fr] gap-2 sm:gap-8 items-start">
+                <dt className="text-[11px] tracking-[0.21em] uppercase font-medium text-[var(--text-secondary)] shrink-0 pt-[5px] whitespace-nowrap">
                   {group.label}
                 </dt>
-                <dd className="flex flex-wrap gap-1.5">
+                <dd className="flex flex-wrap gap-2">
                   {group.items.map((item) => {
                     const Icon = techIcons[item];
                     const color = techColors[item];
                     return (
                       <span
                         key={item}
-                        className="inline-flex items-center gap-1.5 px-3 py-[5px] rounded-full text-[11px] font-medium text-[var(--text-secondary)] bg-[var(--bg-subtle)] border border-[var(--border)] leading-none hover:border-[var(--accent)]/30 hover:bg-[var(--selection)] transition-colors duration-200 cursor-default"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-[5px] rounded-full text-[11px] font-medium text-[var(--text-secondary)] bg-[var(--bg-subtle)] border border-[var(--border)] leading-none hover:border-[var(--accent)]/30 hover:bg-[var(--selection)] transition-colors duration-200 cursor-default"
                       >
                         {Icon && <Icon size={12} style={{ color }} />}
                         {item}
@@ -98,9 +98,9 @@ const Home = () => {
           {/* Divider */}
           <div className="h-[1px] bg-[var(--border)] -mx-8 sm:-mx-12 xl:-mx-16" />
 
-          <div className="flex gap-8 items-start">
-            <div className="w-[180px] shrink-0 pt-[7px]">
-              <p className="text-[var(--text-secondary)] text-[11px] tracking-[0.28em] uppercase font-medium whitespace-nowrap">
+           <div className="grid grid-cols-1 sm:grid-cols-[130px_1fr] lg:grid-cols-[170px_1fr] gap-4 sm:gap-8 items-start">
+            <div className="shrink-0 pt-[7px]">
+              <p className="text-[var(--text-secondary)] text-[11px] tracking-[0.21em] uppercase font-medium whitespace-nowrap">
                 antalya, turkey
               </p>
             </div>

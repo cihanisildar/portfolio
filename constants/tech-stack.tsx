@@ -82,7 +82,7 @@ export const techColors: Record<string, string> = {
 export const stack = [
   { label: "languages", items: ["javascript (es6+)", "typescript", "python", "sql", "go"] },
   { label: "frontend", items: ["react", "next.js", "tailwind css", "tanstack query"] },
-  { label: "backend", items: ["node.js", "express", "django", "prisma orm", "rabbitmq"] },
+  { label: "backend", items: ["node.js", "express", "django", "prisma orm", "postgresql", "redis"] },
   { label: "ai engineering", items: ["llm orchestration", "rag", "vector search (pgvector)", "ai agents"] },
-  { label: "cloud & devops", items: ["docker", "postgresql", "redis", "minio (s3)", "sentry", "turborepo", "grafana", "prometheus"] },
+  { label: "cloud & devops", items: ["docker", "rabbitmq", "minio (s3)", "sentry", "turborepo", "grafana", "prometheus"] },
 ];
