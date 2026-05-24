@@ -10,7 +10,7 @@ const montserrat = Montserrat({
   subsets: ["latin"],
   weight: ["200", "300", "400", "500", "600"],
   variable: "--font-sans",
-  display: "swap",
+  display: "block",
 });
 
 const geistMono = GeistMono;

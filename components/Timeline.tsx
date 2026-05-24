@@ -58,6 +58,8 @@ const Timeline: React.FC<TimelineProps> = ({ experiences }) => {
                                     <img
                                         src={`https://flagcdn.com/w40/${exp.countryCode}.png`}
                                         alt=""
+                                        width={14}
+                                        height={10}
                                         className="w-3.5 h-auto rounded-[1px] shadow-sm shadow-black/5"
                                     />
                                     <span className="uppercase tracking-[0.2em] font-medium text-[9px] text-[var(--text-secondary)]">
