@@ -14,21 +14,27 @@
 
 @layer base {
   :root {
+    /* ── warm desk lamp, not an operating theatre ── */
     --bg: #ffffff;
-    --bg-subtle: #f7f6f4;
-    --text: #1c1b1a;
-    --text-secondary: #5a5754;
-    --text-muted: #9b9794;
-    --accent: #a87a62;
-    --accent-hover: #8c6249;
-    --border: #ebe8e2;
-    --selection: #f0e6dc;
+    --bg-subtle: #faf9f7;
+    --bg-hover: #f5f3ef;
+    --text: #23221f;
+    --text-secondary: #55524b;
+    --text-muted: #8f897d;
+    --border: #eae6df;
+    --rule: #f0ece5;
+    --selection: #f3e7d5;
 
-    /* muted, dusty section tints — desaturated on purpose */
-    --tint-sand: #f6f3ed;
-    --tint-sage: #eef1ec;
-    --tint-mist: #eef0f2;
-    --tint-rose: #f4eee9;
+    /* syntax-ish accents, desaturated so they stay warm */
+    --accent: #b4622d;
+    --accent-hover: #96501f;
+    --comment: #86906a;
+    --string: #8a7b46;
+
+    --tint-sand: #faf9f7;
+    --tint-sage: #eef0e7;
+    --tint-mist: #edeef0;
+    --tint-rose: #f4ece6;
   }
 
   * {
@@ -42,24 +48,170 @@
     min-height: 100vh;
     background-color: var(--bg);
     color: var(--text);
-    font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    letter-spacing: -0.005em;
   }
 
   a {
     color: inherit;
     text-decoration: none;
-    transition: color 0.3s ease;
-  }
-
-  a:hover {
-    color: var(--accent);
   }
 
   ::selection {
     background: var(--selection);
+    color: var(--text);
+  }
+}
+
+/* ── mono: the whole page speaks it ── */
+.mono {
+  font-family: var(--font-plex-mono), var(--font-geist-mono), ui-monospace,
+    SFMono-Regular, Menlo, monospace !important;
+  font-variant-ligatures: none;
+}
+
+/* ── row that warms up under the cursor ── */
+.row {
+  border-radius: 8px;
+  transition: background-color 0.18s ease;
+}
+
+.row:hover {
+  background: var(--bg-hover);
+}
+
+/* links inside a row get the same treatment — fill, no hue shift */
+.row:hover .hlink {
+  text-decoration-color: var(--text-muted);
+}
+
+/* ── project screenshot, framed like a browser window ── */
+.frame {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-subtle);
+  box-shadow: 0 1px 2px rgba(35, 34, 31, 0.04),
+    0 10px 26px -14px rgba(35, 34, 31, 0.16);
+  transition: transform 0.3s cubic-bezier(0.22, 0.61, 0.24, 1),
+    box-shadow 0.3s ease;
+}
+
+.group:hover .frame {
+  transform: translateY(-4px);
+  box-shadow: 0 2px 4px rgba(35, 34, 31, 0.05),
+    0 26px 50px -20px rgba(35, 34, 31, 0.28);
+}
+
+/* the shot breathes: warm halo behind it, slow drift inside it */
+.shot {
+  position: relative;
+  isolation: isolate;
+}
+
+.shot::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 12% 3% -9% 3%;
+  border-radius: 999px;
+  background: radial-gradient(
+    60% 60% at 50% 50%,
+    rgba(180, 98, 45, 0.28),
+    rgba(180, 98, 45, 0) 72%
+  );
+  filter: blur(34px);
+  opacity: 0.45;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.group:hover .shot::after {
+  opacity: 0.9;
+  transform: translateY(5px) scale(1.04);
+}
+
+.frame img {
+  transition: transform 1.4s cubic-bezier(0.22, 0.61, 0.24, 1);
+}
+
+.group:hover .frame img {
+  transform: scale(1.045);
+}
+
+.frame-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.frame-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+}
+
+/* ── links ── */
+.hlink {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  text-decoration-color: var(--border);
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.hlink:hover {
+  text-decoration-color: var(--text-muted);
+}
+
+/* ── status dot ── */
+.dot {
+  box-shadow: 0 0 0 3px rgba(134, 144, 106, 0.18);
+}
+
+/* ── caret ── */
+@keyframes caretBlink {
+  0%, 45% { opacity: 1; }
+  55%, 100% { opacity: 0; }
+}
+
+.caret {
+  animation: caretBlink 1.2s steps(1) infinite;
+}
+
+/* ── entrance ── */
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.reveal {
+  animation: riseIn 0.6s cubic-bezier(0.22, 0.61, 0.24, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .caret {
+    animation: none;
+  }
+
+  .frame,
+  .frame img,
+  .shot::after {
+    transition: none;
+  }
+
+  .group:hover .frame,
+  .group:hover .frame img,
+  .group:hover .shot::after {
+    transform: none;
   }
 }
 

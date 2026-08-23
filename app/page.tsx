@@ -1,183 +1,266 @@
-"use client";
-
 import React from "react";
+import Image from "next/image";
 import { Link } from "next-view-transitions";
-import { ArrowUpRight } from "lucide-react";
-import { motion } from "framer-motion";
-import Timeline from "@/components/Timeline";
-import { techIcons, techColors, stack } from "@/constants/tech-stack";
 import { experiences } from "@/constants/experience";
-import { interests } from "@/constants/interests";
 import { navLinks } from "@/constants/navigation";
 import { socialLinks } from "@/constants/socials";
-import { fadeUp } from "@/constants/animations";
+import { books, articles } from "@/constants/readings";
+import Flag from "@/components/Flag";
+import { projects } from "@/constants/projects";
 
-const Home = () => {
+const links = [
+  ...socialLinks,
+  { label: "email", href: "mailto:cihan.isildar@outlook.com" },
+];
+
+/* "https://kelimatch.vercel.app/" → "kelimatch.vercel.app" */
+const domain = (url: string) => url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+
+/* "sep – oct 2025" → "2025" */
+const year = (period: string) => period.trim().slice(-4);
+
+/* section labels read like code comments */
+const Comment = ({ children }: { children: React.ReactNode }) => (
+  <p className="mb-5 text-[12.5px] text-[var(--comment)]">
+    <span className="select-none opacity-60">{"// "}</span>
+    {children}
+  </p>
+);
+
+export default function Home() {
   return (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      className="lg:flex lg:min-h-screen"
-    >
-      {/* ── Left Panel ── */}
-      <div className="lg:sticky lg:top-0 lg:h-screen lg:w-[54%] lg:border-r lg:border-[var(--border)] flex flex-col justify-between px-6 py-12 sm:px-10 sm:py-14 xl:px-12 xl:py-16 overflow-y-auto overflow-x-hidden [scrollbar-gutter:stable]">
-
-        {/* Top: nav */}
-        <motion.nav
-          variants={fadeUp}
-          custom={0}
-          className="flex items-center gap-5"
+    <div className="min-h-screen px-5 py-8 sm:px-6 sm:py-10">
+      <div className="mx-auto w-full max-w-[42rem]">
+        {/* ── nav ── */}
+        <header
+          className="reveal flex items-center justify-end gap-5"
+          style={{ animationDelay: "0ms" }}
         >
-          {navLinks.map((link, i) => (
-            <React.Fragment key={link.label}>
-              <Link
-                href={link.href}
-                className="text-[11px] tracking-[0.28em] uppercase font-medium text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors duration-300"
-              >
-                {link.label}
-              </Link>
-              {i < navLinks.length - 1 && (
-                <span className="text-[var(--border)] text-xs select-none">·</span>
-              )}
-            </React.Fragment>
+          {navLinks.map((link) => (
+            <Link
+              key={link.label}
+              href={link.href}
+              className="hlink text-[14px] text-[var(--text)]"
+            >
+              {link.label}
+            </Link>
           ))}
-        </motion.nav>
+        </header>
 
-        {/* Middle: isim + bio yan yana, stack altta */}
-        <motion.div variants={fadeUp} custom={1} className="space-y-8 my-12 lg:my-0">
+        {/* ── hello ── */}
+        <section
+          className="reveal pt-20 sm:pt-24"
+          style={{ animationDelay: "60ms" }}
+        >
+          <h1 className="text-[clamp(1.9rem,3.6vw,2.5rem)] font-bold leading-[1.15] tracking-[-0.03em] text-[var(--text)]">
+            cihan ışıldar
+            <span className="caret ml-1 font-normal text-[var(--accent)]">
+              _
+            </span>
+          </h1>
 
-          {/* İsim (sol) + Bio (sağ) */}
-          <div className="grid grid-cols-1 sm:grid-cols-[140px_1fr] lg:grid-cols-[180px_1fr] gap-4 sm:gap-4 items-center">
-            <div className="shrink-0">
-              <h1 className="text-3xl sm:text-4xl xl:text-[3.25rem] font-light tracking-tight text-[var(--text)] leading-none">
-                <span className="block mb-4">cihan</span>
-                <span className="block">ışıldar</span>
-              </h1>
-            </div>
-            <p className="text-[var(--text-secondary)] leading-[1.85] text-[0.875rem] font-light">
-              full-stack engineer specialized in scalable backend systems and
-              ai-powered solutions. currently focused on distributed architectures,
-              performance optimization, and production-grade systems across
-              international environments.
-            </p>
-          </div>
+          <p className="mt-4 flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[13.5px] text-[var(--text-secondary)]">
+            <span>full-stack engineer</span>
+            <span className="text-[var(--text-muted)] opacity-60">·</span>
+            <span className="inline-flex items-center gap-1.5">
+              <Flag code="tr" />
+              gebze, kocaeli
+            </span>
+          </p>
 
-          {/* Divider */}
-          <div className="h-[1px] bg-[var(--border)] -mx-8 sm:-mx-12 xl:-mx-16" />
+          <p className="mt-6 text-[15px] leading-[1.75] text-[var(--text-secondary)]">
+            i build scalable backend systems and ai-powered products that hold
+            up in production.
+          </p>
+        </section>
 
-           {/* Stack */}
-          <dl className="space-y-3">
-            {stack.map((group) => (
-              <div key={group.label} className="grid grid-cols-1 sm:grid-cols-[140px_1fr] lg:grid-cols-[180px_1fr] gap-2 sm:gap-4 items-start">
-                <dt className="text-[11px] tracking-[0.21em] uppercase font-medium text-[var(--text-secondary)] shrink-0 pt-[5.5px] whitespace-nowrap">
-                  {group.label}
-                </dt>
-                <dd className="flex flex-wrap gap-1.5">
-                  {group.items.map((item) => {
-                    const Icon = techIcons[item];
-                    const color = techColors[item];
-                    return (
-                      <span
-                        key={item}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-[4.5px] rounded-full text-[11px] font-medium text-[var(--text-secondary)] bg-[var(--bg-subtle)] border border-[var(--border)] leading-none hover:border-[var(--accent)]/30 hover:bg-[var(--selection)] transition-colors duration-200 cursor-default"
-                      >
-                        {Icon && <Icon size={12} style={{ color }} />}
-                        {item}
+        {/* ── experience ── */}
+        <section
+          className="reveal pt-20"
+          style={{ animationDelay: "120ms" }}
+        >
+          <Comment>experience</Comment>
+
+          <ol className="-mx-3 space-y-1">
+            {experiences.map((job) => (
+              <li key={job.company} className="row px-3 py-3.5">
+                <div className="flex flex-wrap items-baseline gap-x-2">
+                  <span className="text-[15px] font-semibold tracking-[-0.01em] text-[var(--text)]">
+                    {job.company}
+                  </span>
+                  <span className="text-[14px] text-[var(--text-secondary)]">
+                    {job.role}
+                  </span>
+                </div>
+
+                <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-[var(--text-muted)]">
+                  {job.location && (
+                    <>
+                      <span className="inline-flex items-center gap-1.5">
+                        <Flag code={job.countryCode} />
+                        {job.location.toLowerCase()}
                       </span>
-                    );
-                  })}
-                </dd>
-              </div>
+                      <span className="opacity-50">·</span>
+                    </>
+                  )}
+                  <span className="inline-flex items-center gap-1.5">
+                    {job.current && (
+                      <span className="dot inline-block h-[5px] w-[5px] rounded-full bg-[var(--comment)]" />
+                    )}
+                    {job.current ? job.period : year(job.period)}
+                  </span>
+                </p>
+
+                <p className="mt-2 text-[13px] leading-[1.65] text-[var(--text-muted)]">
+                  {job.summary}
+                </p>
+              </li>
             ))}
-          </dl>
+          </ol>
+        </section>
 
-        </motion.div>
+        {/* ── projects ── */}
+        <section className="reveal pt-20" style={{ animationDelay: "150ms" }}>
+          <Comment>projects</Comment>
 
-        {/* Bottom: location + socials */}
-        <motion.div variants={fadeUp} custom={2} className="space-y-8">
-          {/* Divider */}
-          <div className="h-[1px] bg-[var(--border)] -mx-8 sm:-mx-12 xl:-mx-16" />
+          <ul className="space-y-12">
+            {projects.map((project) => (
+              <li key={project.title}>
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group block"
+                >
+                  <div className="shot">
+                    <div className="frame">
+                      <div className="frame-bar">
+                        <span className="frame-dot bg-[#e0aaa0]" />
+                        <span className="frame-dot bg-[#e3c791]" />
+                        <span className="frame-dot bg-[#aac7a2]" />
+                        <span className="ml-2 truncate text-[11px] text-[var(--text-muted)]">
+                          {domain(project.liveUrl)}
+                        </span>
+                      </div>
+                      <div className="relative aspect-[16/9] overflow-hidden">
+                        <Image
+                          src={project.image}
+                          alt={`${project.title} screenshot`}
+                          fill
+                          sizes="(max-width: 700px) 100vw, 672px"
+                          className="object-cover object-top"
+                        />
+                      </div>
+                    </div>
+                  </div>
 
-           <div className="grid grid-cols-1 sm:grid-cols-[140px_1fr] lg:grid-cols-[180px_1fr] gap-4 sm:gap-4 items-start">
-            <div className="shrink-0 pt-[7px]">
-              <p className="text-[var(--text-secondary)] text-[11px] tracking-[0.21em] uppercase font-medium whitespace-nowrap">
-                antalya, turkey
+                  <div className="mt-5">
+                    <div className="flex flex-wrap items-baseline gap-x-2">
+                      <span className="text-[15px] font-semibold tracking-[-0.01em] text-[var(--text)]">
+                        {project.title}
+                      </span>
+                      <span className="text-[12px] text-[var(--text-muted)] opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                        ↗
+                      </span>
+                      <span className="ml-auto text-[12px] text-[var(--text-muted)]">
+                        {project.year}
+                      </span>
+                    </div>
+
+                    <p className="mt-2 text-[13.5px] leading-[1.6] text-[var(--text-secondary)]">
+                      {project.tagline}
+                    </p>
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* ── reading ── */}
+        <section className="reveal pt-20" style={{ animationDelay: "180ms" }}>
+          <Comment>reading</Comment>
+
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-6">
+            <div>
+              <p className="mb-3 text-[12px] text-[var(--text-muted)]">
+                books/
               </p>
-            </div>
-            <nav className="flex items-center gap-2 flex-wrap">
-              {socialLinks.map((link) => {
-                const Icon = link.icon;
-                return (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 px-3 py-[5px] rounded-full border border-[var(--border)] bg-[var(--bg-subtle)] hover:border-[var(--accent)]/30 transition-all duration-200"
+              <ul className="-mx-2.5 space-y-0.5">
+                {books.map((book) => (
+                  <li
+                    key={book}
+                    className="row flex gap-2 px-2.5 py-2 text-[13.5px] leading-[1.55] text-[var(--text-secondary)]"
                   >
-                    <Icon size={12} style={{ color: link.color }} />
-                    <span className="text-[11px] font-medium text-[var(--text-secondary)] group-hover:text-[var(--text)] transition-colors duration-200">
-                      {link.label}
+                    <span className="shrink-0 select-none text-[var(--text-muted)]">
+                      -
                     </span>
-                  </Link>
-                );
-              })}
-            </nav>
-          </div>
-        </motion.div>
-      </div>
+                    <span>{book}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-      {/* ── Right Panel ── */}
-      <div className="lg:w-[46%] flex flex-col justify-between lg:h-screen border-t border-[var(--border)] lg:border-t-0">
-        
-        {/* Experience */}
-        <motion.section
-          variants={fadeUp}
-          custom={2}
-          className="px-8 pt-12 pb-6 sm:px-12 sm:pt-14 sm:pb-8 xl:px-16 xl:pt-16 xl:pb-10 overflow-y-auto no-scrollbar"
-        >
-          <h2 className="text-[11px] tracking-[0.28em] uppercase font-medium text-[var(--text-muted)] mb-8">
-            experience
-          </h2>
-          <Timeline experiences={experiences} />
-        </motion.section>
-
-        {/* Highlights */}
-        <motion.section
-          variants={fadeUp}
-          custom={3}
-          className="px-8 py-5 sm:px-12 sm:py-6 xl:px-16 xl:py-7 border-t border-[var(--border)] bg-[var(--bg-subtle)]/30"
-        >
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-8">
-            <div className="flex items-center gap-2.5">
-              <span className="w-1 h-1 rounded-full bg-[var(--accent)]" />
-              <span className="text-[12.5px] font-medium text-[var(--text-secondary)] lowercase tracking-tight">x3 hackathon winner</span>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <span className="w-1 h-1 rounded-full bg-[var(--accent)]" />
-              <span className="text-[12.5px] font-medium text-[var(--text-secondary)] lowercase tracking-tight">5+ production-grade web applications</span>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <span className="w-1 h-1 rounded-full bg-[var(--accent)]" />
-              <span className="text-[12.5px] font-medium text-[var(--text-secondary)] lowercase tracking-tight">rank 5 in department</span>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <span className="w-1 h-1 rounded-full bg-[var(--accent)]" />
-              <span className="text-[12.5px] font-medium text-[var(--text-secondary)] lowercase tracking-tight">distributed architecture enthusiast</span>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <span className="w-1 h-1 rounded-full bg-[var(--accent)]" />
-              <span className="text-[12.5px] font-medium text-[var(--text-secondary)] lowercase tracking-tight">active open source contributor</span>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <span className="w-1 h-1 rounded-full bg-[var(--accent)]" />
-              <span className="text-[12.5px] font-medium text-[var(--text-secondary)] lowercase tracking-tight">scalable system design enthusiast</span>
+            <div>
+              <p className="mb-3 text-[12px] text-[var(--text-muted)]">
+                articles/
+              </p>
+              <ul className="-mx-2.5 space-y-0.5">
+                {articles.map((article) => (
+                  <li key={article.href}>
+                    <a
+                      href={article.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="row flex gap-2 px-2.5 py-2 text-[13.5px] leading-[1.55] text-[var(--text-secondary)]"
+                    >
+                      <span className="shrink-0 select-none text-[var(--text-muted)]">
+                        -
+                      </span>
+                      <span>{article.title}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
-        </motion.section>
+        </section>
+
+        {/* ── elsewhere ── */}
+        <section className="reveal pt-20" style={{ animationDelay: "240ms" }}>
+          <Comment>elsewhere</Comment>
+
+          <nav className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            {links.map((link, i) => (
+              <React.Fragment key={link.label}>
+                {i > 0 && (
+                  <span className="select-none text-[11px] text-[var(--text-muted)] opacity-50">
+                    ·
+                  </span>
+                )}
+                <a
+                  href={link.href}
+                  target={link.href.startsWith("http") ? "_blank" : undefined}
+                  rel="noopener noreferrer"
+                  className="hlink text-[14px] text-[var(--text-secondary)]"
+                >
+                  {link.label}
+                </a>
+              </React.Fragment>
+            ))}
+          </nav>
+        </section>
+
+        {/* ── footer ── */}
+        <footer
+          className="reveal mt-20 border-t border-[var(--rule)] pt-6"
+          style={{ animationDelay: "300ms" }}
+        >
+          <span className="text-[12px] text-[var(--text-muted)]">
+            © {new Date().getFullYear()} cihan ışıldar
+          </span>
+        </footer>
       </div>
-    </motion.div>
+    </div>
   );
-};
-
-export default Home;
+}

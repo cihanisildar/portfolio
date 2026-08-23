@@ -1,19 +1,25 @@
 import LayoutContent from "@/components/layout-content";
 import type { Metadata } from "next";
 import { ViewTransitions } from "next-view-transitions";
-import { Montserrat } from "next/font/google";
+import { IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import "prismjs/themes/prism-okaidia.css";
 import "./globals.css";
 
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  weight: ["200", "300", "400", "500", "600"],
-  variable: "--font-sans",
-  display: "block",
+const plexSans = IBM_Plex_Sans({
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-display",
+  display: "swap",
 });
 
-const geistMono = GeistMono;
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-plex-mono",
+  display: "swap",
+});
 
 import { siteMetadata } from "@/constants/metadata";
 
@@ -28,10 +34,10 @@ export default function RootLayout({
     <ViewTransitions>
       <html lang="en">
         <body
-          className={`${montserrat.variable} ${geistMono.variable} antialiased relative`}
+          className={`${plexSans.variable} ${plexMono.variable} ${GeistSans.variable} ${GeistMono.variable} antialiased relative`}
           suppressHydrationWarning
         >
-          <LayoutContent fontClass={montserrat.className}>
+          <LayoutContent fontClass={plexSans.className}>
             {children}
           </LayoutContent>
         </body>
