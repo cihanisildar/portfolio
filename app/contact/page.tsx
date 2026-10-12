@@ -1,95 +1,147 @@
-"use client";
-
-import { Link } from "next-view-transitions";
-import { ArrowLeft, ArrowUpRight, Download } from "lucide-react";
-import { motion } from "framer-motion";
-import { SiGmail, SiGithub, SiX } from "react-icons/si";
-import { FaLinkedinIn } from "react-icons/fa";
-
+import React from "react";
+import type { Metadata } from "next";
+import { FiArrowUpRight, FiDownload } from "react-icons/fi";
 import { contactLinks } from "@/constants/socials";
-import { fadeUp } from "@/constants/animations";
+import SiteShell from "@/components/site-shell";
+import {
+  Words,
+  say,
+  settle,
+  StatementLink,
+  type Part,
+} from "@/components/statement";
+
+export const metadata: Metadata = {
+  title: "Contact — Cihan Işıldar",
+};
+
+type Channel = (typeof contactLinks)[number];
+
+const byLabel = (label: string) =>
+  contactLinks.find((c) => c.label === label) as Channel;
+
+/* a channel's tile, at headline size or list size */
+const Tile = ({ channel, size }: { channel: Channel; size: "sm" | "lg" }) => {
+  const Icon = channel.icon;
+  return (
+    <span
+      className={`mark mark-${size}`}
+      style={{ background: channel.tile }}
+      aria-hidden
+    >
+      <Icon color={channel.glyph} />
+    </span>
+  );
+};
+
+const inline = (label: string, after = ""): Part => {
+  const channel = byLabel(label);
+  return {
+    node: (
+      <StatementLink
+        href={channel.href}
+        mark={<Tile channel={channel} size="lg" />}
+        after={after}
+      >
+        {channel.label}
+      </StatementLink>
+    ),
+  };
+};
+
+const headline: Part[] = [
+  ...say("The quickest way to reach me is"),
+  inline("Email", "."),
+  ...say("I’m also on"),
+  inline("LinkedIn"),
+  ...say("and"),
+  inline("GitHub", "."),
+];
 
 export default function ContactPage() {
   return (
-    <motion.main
-      initial="hidden"
-      animate="visible"
-      className="max-w-2xl mx-auto px-6 py-20 sm:py-28"
-    >
-      <motion.div variants={fadeUp} custom={0}>
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors duration-300"
-        >
-          <ArrowLeft size={14} />
-          home
-        </Link>
-      </motion.div>
+    <SiteShell delay={settle(headline) + 260}>
+      {/* ─────────── the sentence ─────────── */}
+      <section className="pt-24 text-center sm:pt-36">
+        <h1 className="statement">
+          <Words parts={headline} />
+        </h1>
 
-      <motion.div
-        variants={fadeUp}
-        custom={1}
-        className="mt-10 flex items-end justify-between"
+        <p
+          className="pitch reveal"
+          style={{ animationDelay: `${settle(headline)}ms` }}
+        >
+          Whether it&rsquo;s a role, a project or a question, I&rsquo;d be
+          glad to hear from you.
+        </p>
+      </section>
+
+      {/* ─────────── two columns ─────────── */}
+      <section
+        className="reveal mt-24 grid gap-14 sm:mt-32 md:grid-cols-2 md:gap-16"
+        style={{ animationDelay: `${settle(headline) + 90}ms` }}
       >
+        {/* channels */}
         <div>
-          <h1 className="text-3xl sm:text-4xl font-light tracking-tight leading-[1.15]">
-            contact
-          </h1>
-          <div className="w-8 h-[1.5px] bg-[var(--accent)] rounded-full mt-7" />
-        </div>
-        <a
-          href="/cihan.isildar.cv.pdf"
-          download
-          className="group inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.28em] font-medium text-[var(--text-muted)] hover:text-[var(--accent)] transition-all duration-300 mb-1"
-        >
-          <Download size={13} className="group-hover:-translate-y-0.5 transition-transform" />
-          download cv
-        </a>
-      </motion.div>
+          <h2 className="column-label">Get in touch</h2>
 
-      <motion.p
-        variants={fadeUp}
-        custom={2}
-        className="mt-8 text-[var(--text-secondary)] text-[1.05rem] leading-[1.8] font-light max-w-[44ch]"
-      >
-        always happy to connect — feel free to reach out.
-      </motion.p>
+          <ul className="mt-8 space-y-2">
+            {contactLinks.map((channel) => (
+              <li key={channel.label}>
+                <a
+                  href={channel.href}
+                  {...(channel.href.startsWith("http")
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
+                  className="channel group"
+                >
+                  <Tile channel={channel} size="sm" />
 
-      <div className="mt-12 divide-y divide-[var(--border)]">
-        {contactLinks.map((link, i) => {
-          const Icon = link.icon;
-          return (
-            <motion.div key={link.label} variants={fadeUp} custom={i + 3}>
-              <Link
-                href={link.href}
-                {...(link.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                className="flex items-center justify-between py-5 group"
-              >
-                <div className="flex items-center gap-4">
-                  <span
-                    className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110"
-                    style={{ background: link.bg }}
-                  >
-                    <Icon size={17} style={{ color: link.color }} />
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-[15px] font-medium tracking-[-0.01em] text-[var(--text)]">
+                      {channel.label}
+                    </span>
+                    <span className="mt-0.5 block truncate text-[14px] text-[var(--text-secondary)]">
+                      {channel.handle}
+                    </span>
                   </span>
-                  <div>
-                    <span className="text-[var(--text)] text-[15px] font-medium tracking-tight block transition-colors duration-300">
-                      {link.label}
-                    </span>
-                    <span className="text-[var(--text-muted)] text-[12.5px] font-light mt-0.5 block">
-                      {link.description}
-                    </span>
-                  </div>
-                </div>
-                <ArrowUpRight
-                  size={15}
-                  className="text-[var(--text-muted)] transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                />
-              </Link>
-            </motion.div>
-          );
-        })}
-      </div>
-    </motion.main>
+
+                  <FiArrowUpRight className="channel-arrow" aria-hidden />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* cv */}
+        <div>
+          <h2 className="column-label">Résumé</h2>
+
+          <a
+            href="/cihan.isildar.cv.pdf"
+            download
+            className="channel group mt-8"
+          >
+            <span
+              className="mark mark-sm mark-logo"
+              aria-hidden
+            >
+              <FiDownload color="var(--text)" />
+            </span>
+
+            <span className="min-w-0 flex-1">
+              <span className="block text-[15px] font-medium tracking-[-0.01em] text-[var(--text)]">
+                Download CV
+              </span>
+              <span className="mt-0.5 block truncate text-[14px] text-[var(--text-secondary)]">
+                cihan.isildar.cv.pdf
+              </span>
+            </span>
+
+            <span className="stamp">PDF</span>
+          </a>
+        </div>
+      </section>
+    </SiteShell>
   );
 }

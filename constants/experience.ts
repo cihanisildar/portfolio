@@ -8,11 +8,24 @@ export type Experience = {
   bullets: string[];
   /** currently working there — shown as "present" */
   current?: boolean;
+  /** company site — the mark links here when set */
+  website?: string;
+  /** "/logos/<file>" — falls back to the initial when absent.
+      fill one in with: node scripts/fetch-logo.mjs <company> <domain> */
+  logo?: string;
+  /** tile colour behind the mark. with a logo it's the backdrop,
+      without one it's the monogram chip. */
+  brand?: string;
+  /** the logo already carries its own background — fill the tile with
+      it instead of padding it onto white. */
+  logoBleed?: boolean;
 };
 
 export const experiences: Experience[] = [
   {
     company: "appsilon",
+    website: "https://www.linkedin.com/company/appsilon-advanced-materials",
+    logo: "/logos/appsilon.png",
     location: "Gebze, Kocaeli",
     countryCode: "tr",
     role: "software engineer",
@@ -27,6 +40,9 @@ export const experiences: Experience[] = [
   },
   {
     company: "cloudit",
+    website: "https://www.cloudits.co",
+    logo: "/logos/cloudit.png",
+    logoBleed: true,
     location: "London, United Kingdom",
     countryCode: "gb",
     role: "frontend developer intern",
@@ -40,6 +56,7 @@ export const experiences: Experience[] = [
   },
   {
     company: "emanager",
+    brand: "#1c1c1c",
     location: "Netherlands",
     countryCode: "nl",
     role: "backend developer intern",
@@ -53,6 +70,8 @@ export const experiences: Experience[] = [
   },
   {
     company: "turkcell",
+    website: "https://www.turkcell.com.tr",
+    logo: "/logos/turkcell.png",
     location: "Istanbul, Turkey",
     countryCode: "tr",
     role: "ai engineer intern",

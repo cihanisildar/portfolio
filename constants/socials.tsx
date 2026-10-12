@@ -1,4 +1,5 @@
-import { SiGithub, SiX, SiGmail } from "react-icons/si";
+import { SiGithub, SiX } from "react-icons/si";
+import { LuMail } from "react-icons/lu";
 import { FaLinkedinIn } from "react-icons/fa";
 
 export const socialLinks = [
@@ -7,37 +8,39 @@ export const socialLinks = [
   { label: "twitter", href: "https://x.com/cihanolmalibu", icon: SiX, color: "#1D9BF0" },
 ];
 
+/* the ways to reach me — each one drawn as a dock tile on the
+   contact page, so tile + glyph follow the same rule as the toolkit. */
 export const contactLinks = [
   {
-    label: "email",
+    label: "Email",
     href: "mailto:cihan.isildar@outlook.com",
-    description: "cihan.isildar@outlook.com",
-    icon: SiGmail,
-    color: "#EA4335",
-    bg: "rgba(234,67,53,0.10)",
+    handle: "cihan.isildar@outlook.com",
+    icon: LuMail,
+    tile: "#1c6cf5",
+    glyph: "#ffffff",
   },
   {
-    label: "linkedin",
+    label: "LinkedIn",
     href: "https://linkedin.com/in/cihanisildar",
-    description: "in/cihanisildar",
+    handle: "in/cihanisildar",
     icon: FaLinkedinIn,
-    color: "#0A66C2",
-    bg: "rgba(10,102,194,0.10)",
+    tile: "#0a66c2",
+    glyph: "#ffffff",
   },
   {
-    label: "github",
+    label: "GitHub",
     href: "https://github.com/cihanisildar",
-    description: "github.com/cihanisildar",
+    handle: "github.com/cihanisildar",
     icon: SiGithub,
-    color: "#9B6DFF",
-    bg: "rgba(155,109,255,0.10)",
+    tile: "#181717",
+    glyph: "#ffffff",
   },
   {
-    label: "twitter",
+    label: "X",
     href: "https://x.com/cihanolmalibu",
-    description: "@cihanolmalibu",
+    handle: "@cihanolmalibu",
     icon: SiX,
-    color: "#1D9BF0",
-    bg: "rgba(29,155,240,0.10)",
+    tile: "#000000",
+    glyph: "#ffffff",
   },
 ];

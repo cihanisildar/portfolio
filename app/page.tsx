@@ -1,266 +1,188 @@
 import React from "react";
+import { LuServer, LuSparkles } from "react-icons/lu";
 import Image from "next/image";
-import { Link } from "next-view-transitions";
-import { experiences } from "@/constants/experience";
-import { navLinks } from "@/constants/navigation";
-import { socialLinks } from "@/constants/socials";
-import { books, articles } from "@/constants/readings";
-import Flag from "@/components/Flag";
-import { projects } from "@/constants/projects";
+import { experiences, type Experience } from "@/constants/experience";
+import { tools, stack, type Tool } from "@/constants/toolkit";
+import Avatar from "@/components/avatar";
+import SiteShell from "@/components/site-shell";
+import {
+  Words,
+  say,
+  settle,
+  StatementLink,
+  type Part,
+} from "@/components/statement";
 
-const links = [
-  ...socialLinks,
-  { label: "email", href: "mailto:cihan.isildar@outlook.com" },
-];
+/* ──────────────────────────────────────────────────────────────
+   one screen. a sentence that says who i am, with the faces and
+   marks set straight into it, and two quiet columns underneath:
+   where i've worked, and what's open on my dock.
+   ────────────────────────────────────────────────────────────── */
 
-/* "https://kelimatch.vercel.app/" → "kelimatch.vercel.app" */
-const domain = (url: string) => url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+const current = experiences.find((job) => job.current) ?? experiences[0];
 
-/* "sep – oct 2025" → "2025" */
-const year = (period: string) => period.trim().slice(-4);
+/* "2026 — present" → "2026–NOW", "sep – oct 2025" → "SEP–OCT 2025" */
+const stamp = (period: string) =>
+  period.replace(/present/i, "now").replace(/\s*[—–-]\s*/g, "–").toUpperCase();
 
-/* section labels read like code comments */
-const Comment = ({ children }: { children: React.ReactNode }) => (
-  <p className="mb-5 text-[12.5px] text-[var(--comment)]">
-    <span className="select-none opacity-60">{"// "}</span>
-    {children}
-  </p>
+/* the company's own logo when we have the file, otherwise its initial
+   on a brand-coloured chip — same squircle either way, so a missing
+   logo doesn't break the rhythm with the app tiles. */
+const Mark = ({ job, size }: { job: Experience; size: "sm" | "lg" }) => {
+  const shape = size === "lg" ? "mark mark-lg" : "mark mark-sm";
+
+  if (job.logo) {
+    return (
+      <span
+        className={`${shape} mark-logo`}
+        style={job.brand ? { background: job.brand } : undefined}
+      >
+        <Image
+          src={job.logo}
+          alt={`${job.company} logo`}
+          fill
+          sizes="64px"
+          className={
+            job.logoBleed ? "object-cover" : "object-contain p-[16%]"
+          }
+        />
+      </span>
+    );
+  }
+
+  return (
+    <span
+      className={shape}
+      style={{ background: job.brand ?? "#1c1c1c" }}
+      aria-hidden
+    >
+      {job.company.charAt(0).toUpperCase()}
+    </span>
+  );
+};
+
+/* a grid of app-icon tiles — the dock and the stack both use it */
+const Shelf = ({ items }: { items: Tool[] }) => (
+  <ul className="mt-8 grid grid-cols-[repeat(auto-fill,minmax(72px,1fr))] gap-4">
+    {items.map((tool) => {
+      const Icon = tool.icon;
+      return (
+        <li key={tool.label}>
+          <a
+            href={tool.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={`${tool.label} — ${tool.note}`}
+            aria-label={`${tool.label}, ${tool.note}`}
+            className={`tile${tool.outlined ? " tile-outlined" : ""}`}
+            style={{ background: tool.tile }}
+          >
+            <Icon size={30} color={tool.glyph} aria-hidden />
+          </a>
+        </li>
+      );
+    })}
+  </ul>
 );
+
+/* who and where — the face and the company ride in the sentence */
+const headline: Part[] = [
+  ...say("I’m"),
+  { node: <Avatar className="inline-avatar" /> },
+  ...say("Cihan Işıldar, a software engineer at"),
+  {
+    node: (
+      <StatementLink
+        href={current.website ?? "#"}
+        mark={<Mark job={current} size="lg" />}
+        after="."
+      >
+        <span className="capitalize">{current.company}</span>
+      </StatementLink>
+    ),
+  },
+];
 
 export default function Home() {
   return (
-    <div className="min-h-screen px-5 py-8 sm:px-6 sm:py-10">
-      <div className="mx-auto w-full max-w-[42rem]">
-        {/* ── nav ── */}
-        <header
-          className="reveal flex items-center justify-end gap-5"
-          style={{ animationDelay: "0ms" }}
-        >
-          {navLinks.map((link) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              className="hlink text-[14px] text-[var(--text)]"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </header>
-
-        {/* ── hello ── */}
-        <section
-          className="reveal pt-20 sm:pt-24"
-          style={{ animationDelay: "60ms" }}
-        >
-          <h1 className="text-[clamp(1.9rem,3.6vw,2.5rem)] font-bold leading-[1.15] tracking-[-0.03em] text-[var(--text)]">
-            cihan ışıldar
-            <span className="caret ml-1 font-normal text-[var(--accent)]">
-              _
-            </span>
+    <SiteShell>
+        {/* ─────────── the sentence ─────────── */}
+        <section className="pt-24 text-center sm:pt-36">
+          <h1 className="statement">
+            <Words parts={headline} />
           </h1>
 
-          <p className="mt-4 flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[13.5px] text-[var(--text-secondary)]">
-            <span>full-stack engineer</span>
-            <span className="text-[var(--text-muted)] opacity-60">·</span>
-            <span className="inline-flex items-center gap-1.5">
-              <Flag code="tr" />
-              gebze, kocaeli
+          <p
+            className="pitch reveal"
+            style={{ animationDelay: `${settle(headline)}ms` }}
+          >
+            I work across{" "}
+            <span className="pill-tag pill-tag-backend">
+              <LuServer aria-hidden />
+              backend engineering
+            </span>{" "}
+            and{" "}
+            <span className="pill-tag pill-tag-ai">
+              <LuSparkles aria-hidden />
+              applied AI
             </span>
-          </p>
-
-          <p className="mt-6 text-[15px] leading-[1.75] text-[var(--text-secondary)]">
-            i build scalable backend systems and ai-powered products that hold
-            up in production.
+            , building software that teams can rely on as their product grows.
           </p>
         </section>
 
-        {/* ── experience ── */}
-        <section
-          className="reveal pt-20"
-          style={{ animationDelay: "120ms" }}
+        {/* ─────────── two columns ─────────── */}
+        <section className="reveal mt-24 grid gap-14 sm:mt-32 md:grid-cols-2 md:gap-16"
+          style={{ animationDelay: "90ms" }}
         >
-          <Comment>experience</Comment>
+          {/* work */}
+          <div>
+            <h2 className="column-label">Work experience</h2>
 
-          <ol className="-mx-3 space-y-1">
-            {experiences.map((job) => (
-              <li key={job.company} className="row px-3 py-3.5">
-                <div className="flex flex-wrap items-baseline gap-x-2">
-                  <span className="text-[15px] font-semibold tracking-[-0.01em] text-[var(--text)]">
-                    {job.company}
-                  </span>
-                  <span className="text-[14px] text-[var(--text-secondary)]">
-                    {job.role}
-                  </span>
-                </div>
+            <ol className="mt-8 space-y-9">
+              {experiences.map((job) => (
+                <li key={job.company} className="flex gap-5">
+                  <Mark job={job} size="sm" />
 
-                <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-[var(--text-muted)]">
-                  {job.location && (
-                    <>
-                      <span className="inline-flex items-center gap-1.5">
-                        <Flag code={job.countryCode} />
-                        {job.location.toLowerCase()}
-                      </span>
-                      <span className="opacity-50">·</span>
-                    </>
-                  )}
-                  <span className="inline-flex items-center gap-1.5">
-                    {job.current && (
-                      <span className="dot inline-block h-[5px] w-[5px] rounded-full bg-[var(--comment)]" />
-                    )}
-                    {job.current ? job.period : year(job.period)}
-                  </span>
-                </p>
+                  <div className="min-w-0">
+                    <span className="stamp">{stamp(job.period)}</span>
 
-                <p className="mt-2 text-[13px] leading-[1.65] text-[var(--text-muted)]">
-                  {job.summary}
-                </p>
-              </li>
-            ))}
-          </ol>
-        </section>
+                    <h3 className="mt-2.5 text-[15px] font-medium tracking-[-0.01em] text-[var(--text)]">
+                      {job.website ? (
+                        <a
+                          href={job.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hlink"
+                        >
+                          {job.role} at {job.company}
+                        </a>
+                      ) : (
+                        <>
+                          {job.role} at {job.company}
+                        </>
+                      )}
+                    </h3>
 
-        {/* ── projects ── */}
-        <section className="reveal pt-20" style={{ animationDelay: "150ms" }}>
-          <Comment>projects</Comment>
-
-          <ul className="space-y-12">
-            {projects.map((project) => (
-              <li key={project.title}>
-                <a
-                  href={project.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block"
-                >
-                  <div className="shot">
-                    <div className="frame">
-                      <div className="frame-bar">
-                        <span className="frame-dot bg-[#e0aaa0]" />
-                        <span className="frame-dot bg-[#e3c791]" />
-                        <span className="frame-dot bg-[#aac7a2]" />
-                        <span className="ml-2 truncate text-[11px] text-[var(--text-muted)]">
-                          {domain(project.liveUrl)}
-                        </span>
-                      </div>
-                      <div className="relative aspect-[16/9] overflow-hidden">
-                        <Image
-                          src={project.image}
-                          alt={`${project.title} screenshot`}
-                          fill
-                          sizes="(max-width: 700px) 100vw, 672px"
-                          className="object-cover object-top"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-5">
-                    <div className="flex flex-wrap items-baseline gap-x-2">
-                      <span className="text-[15px] font-semibold tracking-[-0.01em] text-[var(--text)]">
-                        {project.title}
-                      </span>
-                      <span className="text-[12px] text-[var(--text-muted)] opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                        ↗
-                      </span>
-                      <span className="ml-auto text-[12px] text-[var(--text-muted)]">
-                        {project.year}
-                      </span>
-                    </div>
-
-                    <p className="mt-2 text-[13.5px] leading-[1.6] text-[var(--text-secondary)]">
-                      {project.tagline}
+                    <p className="mt-1 max-w-[38ch] text-[14px] leading-[1.55] text-[var(--text-secondary)]">
+                      {job.summary}
                     </p>
                   </div>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
+                </li>
+              ))}
+            </ol>
+          </div>
 
-        {/* ── reading ── */}
-        <section className="reveal pt-20" style={{ animationDelay: "180ms" }}>
-          <Comment>reading</Comment>
+          {/* dock */}
+          <div>
+            <h2 className="column-label">Apps &amp; tools</h2>
 
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-6">
-            <div>
-              <p className="mb-3 text-[12px] text-[var(--text-muted)]">
-                books/
-              </p>
-              <ul className="-mx-2.5 space-y-0.5">
-                {books.map((book) => (
-                  <li
-                    key={book}
-                    className="row flex gap-2 px-2.5 py-2 text-[13.5px] leading-[1.55] text-[var(--text-secondary)]"
-                  >
-                    <span className="shrink-0 select-none text-[var(--text-muted)]">
-                      -
-                    </span>
-                    <span>{book}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <Shelf items={tools} />
 
-            <div>
-              <p className="mb-3 text-[12px] text-[var(--text-muted)]">
-                articles/
-              </p>
-              <ul className="-mx-2.5 space-y-0.5">
-                {articles.map((article) => (
-                  <li key={article.href}>
-                    <a
-                      href={article.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="row flex gap-2 px-2.5 py-2 text-[13.5px] leading-[1.55] text-[var(--text-secondary)]"
-                    >
-                      <span className="shrink-0 select-none text-[var(--text-muted)]">
-                        -
-                      </span>
-                      <span>{article.title}</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <h2 className="column-label mt-14">Languages &amp; frameworks</h2>
+
+            <Shelf items={stack} />
           </div>
         </section>
-
-        {/* ── elsewhere ── */}
-        <section className="reveal pt-20" style={{ animationDelay: "240ms" }}>
-          <Comment>elsewhere</Comment>
-
-          <nav className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            {links.map((link, i) => (
-              <React.Fragment key={link.label}>
-                {i > 0 && (
-                  <span className="select-none text-[11px] text-[var(--text-muted)] opacity-50">
-                    ·
-                  </span>
-                )}
-                <a
-                  href={link.href}
-                  target={link.href.startsWith("http") ? "_blank" : undefined}
-                  rel="noopener noreferrer"
-                  className="hlink text-[14px] text-[var(--text-secondary)]"
-                >
-                  {link.label}
-                </a>
-              </React.Fragment>
-            ))}
-          </nav>
-        </section>
-
-        {/* ── footer ── */}
-        <footer
-          className="reveal mt-20 border-t border-[var(--rule)] pt-6"
-          style={{ animationDelay: "300ms" }}
-        >
-          <span className="text-[12px] text-[var(--text-muted)]">
-            © {new Date().getFullYear()} cihan ışıldar
-          </span>
-        </footer>
-      </div>
-    </div>
+    </SiteShell>
   );
 }
